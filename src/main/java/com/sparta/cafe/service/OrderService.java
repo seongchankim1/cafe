@@ -11,9 +11,11 @@ import java.util.stream.Collectors;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
 import com.sparta.cafe.entity.Coffee;
+import com.sparta.cafe.entity.CompleteOrder;
 import com.sparta.cafe.entity.Order;
 import com.sparta.cafe.entity.User;
 import com.sparta.cafe.repository.CoffeeRepository;
+import com.sparta.cafe.repository.CompleteOrderRepository;
 import com.sparta.cafe.repository.OrderRepository;
 import com.sparta.cafe.repository.UserRepository;
 
@@ -23,12 +25,14 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final CoffeeRepository coffeeRepository;
 	private final UserRepository userRepository;
+	private final CompleteOrderRepository completeOrderRepository;
 	private List<Long> completeList = new ArrayList<>();
 
-	public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, UserRepository userRepository) {
+	public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, UserRepository userRepository, CompleteOrderRepository completeOrderRepository) {
 		this.orderRepository = orderRepository;
 		this.coffeeRepository = coffeeRepository;
 		this.userRepository = userRepository;
+		this.completeOrderRepository = completeOrderRepository;
 	}
 
 	public OrderResponseDto addOrder(OrderRequestDto orderRequestDto) {
@@ -76,17 +80,34 @@ public class OrderService {
 	}
 
 	public List<OrderResponseDto> getAllOrders() {
-		return orderRepository.findAllByOrderByCreatedAt().stream().map(OrderResponseDto::new).toList();
+		return orderRepository.findAllByOrderByCreatedAt().stream()
+			.map(order -> new OrderResponseDto(order))
+			.collect(Collectors.toList());
 	}
 
+
+
 	public int deleteOrder(Long id) {
+		Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+		completeOrder(order);
 		orderRepository.deleteById(id);
 		completeList.add(id);
 		completeList.sort(Collections.reverseOrder());
+
 		return id.intValue();
 	}
 
 	public List<Long> getCompletedOrders() {
 		return completeList;
 	}
+
+	public void completeOrder(Order order) {
+		CompleteOrder completeOrder = new CompleteOrder();
+		completeOrder.setOrderId(order.getOrderId()); // orderId 설정
+		completeOrder.setUser(order.getUser());
+		completeOrder.setCoffee(order.getCoffee());
+		completeOrder.setPrice(order.getPrice());
+		completeOrderRepository.save(completeOrder);
+	}
+
 }

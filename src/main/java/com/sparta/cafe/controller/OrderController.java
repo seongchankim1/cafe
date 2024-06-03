@@ -45,4 +45,9 @@ public class OrderController {
 	public List<Long> getCompletedOrders() {
 		return orderService.getCompletedOrders();
 	}
+
+	@GetMapping("/delete") // delete에 대한 핸들러 추가
+	public String getDeletePage() {
+		return "delete"; // delete 파일을 반환
+	}
 }

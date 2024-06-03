@@ -50,14 +50,10 @@ public class OrderTest {
 	@Rollback(false)
 	@DisplayName("커피 임의 추가")
 	void test2() {
-		User user = new User();
-		user.setUsername("김정재");
-		user = userRepository.save(user);
-
 		Coffee coffee = new Coffee();
-		coffee.setCoffeeName("카페라떼");
+		coffee.setCoffeeName("국화차");
 		coffee.setOrderList(new ArrayList<>());
-		coffee.setPrice(2000);
+		coffee.setPrice(1000);
 
 		coffee = coffeeRepository.save(coffee);
 		assertNotNull(coffee.getId());

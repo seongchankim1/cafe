@@ -31,11 +31,15 @@ public class Coffee {
 	@OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Order> orderList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Order> completeOrderList = new ArrayList<>();
+
 	@Column(nullable = false)
 	private int price;
 
-	public Coffee(String coffeeName, List<Order> orderList) {
+	public Coffee(String coffeeName, List<Order> orderList, List<Order> completeOrderList) {
 		this.coffeeName = coffeeName;
 		this.orderList = orderList;
+		this.completeOrderList = completeOrderList;
 	}
 }
