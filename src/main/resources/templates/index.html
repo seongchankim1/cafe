@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카페 주문 시스템</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .menu, .orders {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 45%;
+        }
+        .menu h1, .orders h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #00796b;
+        }
+        .menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        .order-number {
+            font-size: 5rem;
+            color: #d32f2f;
+        }
+        .pending-orders, .completed-orders {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .order-box {
+            font-size: 3rem;
+            margin: 5px 0;
+            background: #f1f8e9;
+            border-radius: 4px;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <h1>LATTE</h1>
+    <ul>
+        <li>카페라떼 (Cafe Latte) - 2.7</li>
+        <li>바닐라라떼 / 헤이즐넛라떼 (Vanilla Latte / Hazelnut Latte) - 3.2</li>
+        <li>연유라떼 (Condensed Milk Latte) - 3.0</li>
+        <li>티라미수라떼 (Tiramisu Latte) - 3.9</li>
+        <li>차이라떼 (Chai Latte) - 3.5</li>
+        <li>... 기타 메뉴 ...</li>
+    </ul>
+</div>
+<div class="orders">
+    <h2>주문하신 음료 나왔습니다</h2>
+    <div class="completed-orders">
+        <div class="order-box" id="completedOrder1">-</div>
+        <div class="order-box" id="completedOrder2">-</div>
+        <div class="order-box" id="completedOrder3">-</div>
+        <div class="order-box" id="completedOrder4">-</div>
+        <div class="order-box" id="completedOrder5">-</div>
+    </div>
+    <h2>대기 중인 주문</h2>
+    <div class="pending-orders">
+        <div class="order-box" id="pendingOrder1">-</div>
+        <div class="order-box" id="pendingOrder2">-</div>
+        <div class="order-box" id="pendingOrder3">-</div>
+        <div class="order-box" id="pendingOrder4">-</div>
+        <div class="order-box" id="pendingOrder5">-</div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        function fetchOrders() {
+            fetch('/api/cafe/orders')
+                .then(response => response.json())
+                .then(data => {
+                    // 대기 중인 주문
+                    const pendingOrders = data.slice(0, 5);
+                    for (let i = 0; i < 5; i++) {
+                        document.getElementById(`pendingOrder${i + 1}`).textContent = pendingOrders[i] ? pendingOrders[i].orderId : '-';
+                    }
+                });
+
+            fetch('/api/cafe/completed-orders')
+                .then(response => response.json())
+                .then(data => {
+                    // 완료된 주문
+                    const completedOrders = data.slice(0, 5);
+                    for (let i = 0; i < 5; i++) {
+                        document.getElementById(`completedOrder${i + 1}`).textContent = completedOrders[i] ? completedOrders[i] : '-';
+                    }
+                });
+        }
+
+        setInterval(fetchOrders, 5000); // 5초마다 업데이트
+    });
+
+    function displayDeletedOrder(id) {
+        const completedOrder = document.getElementById('completedOrder1');
+        completedOrder.textContent = id;
+    }
+</script>
+</body>
+</html>

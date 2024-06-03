@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 삭제</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f4f6;
+        }
+        .delete-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .delete-form input {
+            padding: 10px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .delete-form button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-form button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+<div class="delete-form">
+    <input type="number" id="orderId" placeholder="주문 ID 입력">
+    <button onclick="deleteOrder()">삭제</button>
+</div>
+<script>
+    function deleteOrder() {
+        const orderId = document.getElementById('orderId').value;
+        fetch(`/api/cafe/orders/${orderId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    alert(`주문 ID ${orderId}이(가) 삭제되었습니다.`);
+                    // index.html 페이지의 displayDeletedOrder 함수 호출
+                    window.opener.displayDeletedOrder(orderId);
+                } else {
+                    alert('주문을 삭제할 수 없습니다.');
+                }
+            });
+    }
+</script>
+</body>
+</html>
