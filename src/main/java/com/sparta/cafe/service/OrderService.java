@@ -49,7 +49,7 @@ public class OrderService {
 		User user = userRepository.findByUsername(orderRequestDto.getUsername());
 
 		// Order Entity 생성
-		Order order = new Order(orderRequestDto);
+		Order order = new Order(orderRequestDto, user, coffee);
 		order.setCoffee(coffee);
 		order.setUser(user);
 		order.setPrice(coffee.getPrice());
@@ -81,7 +81,7 @@ public class OrderService {
 
 	public List<OrderResponseDto> getAllOrders() {
 		return orderRepository.findAllByOrderByCreatedAt().stream()
-			.map(order -> new OrderResponseDto(order))
+			.map(OrderResponseDto::new)
 			.collect(Collectors.toList());
 	}
 

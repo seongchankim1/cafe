@@ -7,6 +7,7 @@ import lombok.Getter;
 public class OrderResponseDto {
 
 	private Long orderId;
+
 	private Long userId;
 	private Long coffeeId;
 	private int price;

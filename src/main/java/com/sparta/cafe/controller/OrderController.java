@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.cafe.dto.CoffeeResponseDto;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
+import com.sparta.cafe.service.CoffeeService;
 import com.sparta.cafe.service.OrderService;
 
 import jakarta.validation.Valid;
@@ -21,9 +23,11 @@ import jakarta.validation.Valid;
 public class OrderController {
 
 	private final OrderService orderService;
+	private final CoffeeService coffeeService;
 
-	public OrderController(OrderService orderService) {
+	public OrderController(OrderService orderService, CoffeeService coffeeService) {
 		this.orderService = orderService;
+		this.coffeeService = coffeeService;
 	}
 
 	@PostMapping
@@ -49,5 +53,10 @@ public class OrderController {
 	@GetMapping("/delete") // delete에 대한 핸들러 추가
 	public String getDeletePage() {
 		return "delete"; // delete 파일을 반환
+	}
+
+	@GetMapping("/coffees")
+	public List<CoffeeResponseDto> getAllCoffees() {
+		return coffeeService.getAllCoffees();
 	}
 }

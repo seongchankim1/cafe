@@ -44,7 +44,7 @@ public class Order extends Timestamped {
 	private String coffeeName;
 
 	// 생성자 추가
-	public Order(OrderRequestDto orderRequestDto) {
+	public Order(OrderRequestDto orderRequestDto, User user, Coffee coffee) {
 		this.price = orderRequestDto.getPrice();
 		this.username = user.getUsername();
 		this.coffeeName = coffee.getCoffeeName();

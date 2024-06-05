@@ -15,4 +15,9 @@ public class HomeController {
 	public String getDeletePage() {
 		return "delete"; // delete.html 파일의 이름
 	}
+
+	@GetMapping("/order")
+	public String getOrderPage() {
+		return "order";
+	}
 }
