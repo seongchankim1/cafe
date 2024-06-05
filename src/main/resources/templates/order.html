@@ -35,7 +35,8 @@
         }
         .card img {
             width: 100%;
-            height: auto;
+            height: 200px; /* 원하는 고정 높이 */
+            object-fit: cover; /* 이미지 비율 유지하면서 크기 맞춤 */
         }
         .card-body {
             padding: 15px;
@@ -101,7 +102,7 @@
                 card.className = 'card';
 
                 card.innerHTML = `
-                    <img src="coffee-image.jpg" class="card-img-top" alt="${coffee.coffeeName}">
+                    <img src="${coffee.imageUrl}" class="card-img-top" alt="${coffee.coffeeName}">
                     <div class="card-body">
                         <h5 class="card-title">${coffee.coffeeName}</h5>
                         <p class="card-text">${coffee.price}원</p>

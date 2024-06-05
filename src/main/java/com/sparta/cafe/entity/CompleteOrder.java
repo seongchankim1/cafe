@@ -19,18 +19,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CompleteOrder {
+public class CompleteOrder extends Timestamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "complete_id")
 	private Long completeId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "coffee_id", nullable = false)
 	private Coffee coffee;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private User user;
 

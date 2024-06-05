@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -37,9 +38,13 @@ public class Coffee {
 	@Column(nullable = false)
 	private int price;
 
-	public Coffee(String coffeeName, List<Order> orderList, List<Order> completeOrderList) {
+	@Column
+	private String imageUrl;
+
+	public Coffee(String coffeeName, List<Order> orderList, List<Order> completeOrderList, String imageUrl) {
 		this.coffeeName = coffeeName;
 		this.orderList = orderList;
 		this.completeOrderList = completeOrderList;
+		this.imageUrl = imageUrl;
 	}
 }
