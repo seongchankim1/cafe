@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sparta.cafe.CafeApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-06-17T07:23:54" hostname="DESKTOP-L74TS17" time="0.51">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.sparta.cafe.CafeApplicationTests" time="0.51"/>
+  <system-out><![CDATA[16:23:47.032 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sparta.cafe.CafeApplicationTests]: CafeApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:23:47.161 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sparta.cafe.CafeApplication for test class com.sparta.cafe.CafeApplicationTests
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-06-17T16:23:47.618+09:00  INFO 19016 --- [cafe] [    Test worker] com.sparta.cafe.CafeApplicationTests     : Starting CafeApplicationTests using Java 17.0.11 with PID 19016 (started by minie in C:\Users\minie\IdeaProjects\cafe)
+2024-06-17T16:23:47.620+09:00  INFO 19016 --- [cafe] [    Test worker] com.sparta.cafe.CafeApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2024-06-17T16:23:48.676+09:00  INFO 19016 --- [cafe] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-17T16:23:48.757+09:00  INFO 19016 --- [cafe] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 60 ms. Found 4 JPA repository interfaces.
+2024-06-17T16:23:49.495+09:00  INFO 19016 --- [cafe] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-17T16:23:49.578+09:00  INFO 19016 --- [cafe] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-06-17T16:23:49.629+09:00  INFO 19016 --- [cafe] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-17T16:23:49.999+09:00  INFO 19016 --- [cafe] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-17T16:23:50.028+09:00  INFO 19016 --- [cafe] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-17T16:23:50.321+09:00  INFO 19016 --- [cafe] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@b267745
+2024-06-17T16:23:50.323+09:00  INFO 19016 --- [cafe] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-17T16:23:51.687+09:00  INFO 19016 --- [cafe] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-06-17T16:23:51.767+09:00  INFO 19016 --- [cafe] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-17T16:23:52.901+09:00  WARN 19016 --- [cafe] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-17T16:23:52.993+09:00  INFO 19016 --- [cafe] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-06-17T16:23:53.991+09:00  INFO 19016 --- [cafe] [    Test worker] com.sparta.cafe.CafeApplicationTests     : Started CafeApplicationTests in 6.65 seconds (process running for 7.985)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
