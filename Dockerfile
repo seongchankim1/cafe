@@ -10,10 +10,11 @@ VOLUME /tmp
 # 8080 포트를 외부에 노출
 EXPOSE 8080
 
+# 작업 디렉토리 설정
 WORKDIR /app
 
 # 애플리케이션의 JAR 파일 경로 설정 (build.gradle에 설정된 경로와 일치해야 함)
-COPY build/libs/cafe-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/cafe-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # JAR 파일 실행
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
