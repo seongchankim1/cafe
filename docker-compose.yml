@@ -9,14 +9,5 @@ services:
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    depends_on:
-      - mysql
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: ht8ZG8tIsXTMrlOO6xU5DlxPmCC2xWhZNyNxWYOkFFo=
-      MYSQL_DATABASE: mysql
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: CLQgoNyxb6yLjPiKgN2k7swPAQAkZz3TJZ/SMhajEXg=
     ports:
-      - "3306:3306"
+      - "8080:8080"  # 변경된 포트를 여기서 명시합니다.
