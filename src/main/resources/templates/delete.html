@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음료 완료</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .delete-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .delete-form h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00796b;
+        }
+        #pendingOrdersList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.333% - 20px); /* 3개의 카드를 한 줄에 배치 */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 20px); /* 2개의 카드를 한 줄에 배치 (화면 너비가 좁을 때) */
+            }
+        }
+        @media (max-width: 480px) {
+            .card {
+                width: 100%; /* 1개의 카드를 한 줄에 배치 (화면 너비가 매우 좁을 때) */
+            }
+        }
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+        .card-body {
+            text-align: center;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .card-text {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+<div class="delete-form">
+    <h2>대기 중인 주문 목록</h2>
+    <div id="pendingOrdersList">
+        <!-- 여기에 대기 중인 주문 목록이 동적으로 추가될 것입니다 -->
+    </div>
+</div>
+<script>
+    // 페이지 로드 시 대기 중인 주문 목록을 가져와서 표시합니다
+    document.addEventListener('DOMContentLoaded', fetchPendingOrders);
+
+    function fetchPendingOrders() {
+        fetch('/api/cafe/orders')
+            .then(response => response.json())
+            .then(data => {
+                const pendingOrdersList = document.getElementById('pendingOrdersList');
+                pendingOrdersList.innerHTML = ''; // 기존 목록 초기화
+                data.forEach(order => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    const cardHeader = document.createElement('div');
+                    cardHeader.className = 'card-header';
+                    cardHeader.textContent = `주문번호: ${order.orderId}`;
+
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
+
+                    const cardTitle = document.createElement('h5');
+                    cardTitle.className = 'card-title';
+                    cardTitle.textContent = `음료: ${order.coffeeName}`;
+
+                    const cardText = document.createElement('p');
+                    cardText.className = 'card-text';
+                    cardText.textContent = `고객: ${order.username}`;
+
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.textContent = '완료';
+                    btn.onclick = () => deleteOrder(order.orderId);
+
+                    cardBody.appendChild(cardTitle);
+                    cardBody.appendChild(cardText);
+                    cardBody.appendChild(btn);
+
+                    card.appendChild(cardHeader);
+                    card.appendChild(cardBody);
+
+                    pendingOrdersList.appendChild(card);
+                });
+            });
+    }
+
+    function deleteOrder(orderId) {
+        fetch(`/api/cafe/orders/${orderId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    alert(`주문 ID ${orderId}이(가) 완료되었습니다.`);
+                    // 페이지 새로고침
+                    window.location.reload();
+                } else {
+                    alert('주문을 완료할 수 없습니다.');
+                }
+            });
+    }
+</script>
+</body>
+</html>

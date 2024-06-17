@@ -10,6 +10,9 @@ VOLUME /tmp
 # 8080 포트를 외부에 노출
 EXPOSE 8080
 
+WORKDIR /cafe
+COPY build/libs /app/build/libs
+
 # 애플리케이션의 JAR 파일 경로 설정 (build.gradle에 설정된 경로와 일치해야 함)
 ARG JAR_FILE=build/libs/cafe-0.0.1-SNAPSHOT.jar
 
