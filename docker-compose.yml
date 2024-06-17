@@ -1,31 +1,22 @@
 version: '3.8'
-
 services:
-  db:
+  mysql:
     image: mysql:8.0
+    container_name: mysql-qn7x
     environment:
-      MYSQL_ROOT_PASSWORD: 12345678
-      MYSQL_DATABASE: cafe
+      MYSQL_ROOT_PASSWORD: ht8ZG8tIsXTMrlOO6xU5DlxPmCC2xWhZNyNxWYOkFFo=
+      MYSQL_DATABASE: mysql
     ports:
       - "3306:3306"
-    networks:
-      - backend-network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
+    image: minielec7077/cafe:0.0.1
+    container_name: app
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cafe
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mysql
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 12345678
+      SPRING_DATASOURCE_PASSWORD: ht8ZG8tIsXTMrlOO6xU5DlxPmCC2xWhZNyNxWYOkFFo=
+    depends_on:
+      - mysql
     ports:
       - "8080:8080"
-    networks:
-      - backend-network
-
-networks:
-  backend-network:
-    driver: bridge
