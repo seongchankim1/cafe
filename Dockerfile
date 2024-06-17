@@ -15,8 +15,6 @@ WORKDIR /app
 # 애플리케이션의 JAR 파일 경로 설정 (build.gradle에 설정된 경로와 일치해야 함)
 COPY build/libs/cafe-0.0.1-SNAPSHOT.jar app.jar
 
-CMD ["java", "-jar", "app.jar"]
-
 # 애플리케이션의 JAR 파일을 컨테이너의 app.jar로 복사
 COPY ${JAR_FILE} app.jar
 
