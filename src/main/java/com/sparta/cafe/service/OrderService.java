@@ -19,6 +19,8 @@ import com.sparta.cafe.repository.CompleteOrderRepository;
 import com.sparta.cafe.repository.OrderRepository;
 import com.sparta.cafe.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class OrderService {
 
@@ -35,6 +37,7 @@ public class OrderService {
 		this.completeOrderRepository = completeOrderRepository;
 	}
 
+	@Transactional
 	public OrderResponseDto addOrder(OrderRequestDto orderRequestDto) {
 		// 커피 정보를 불러와서 설정합니다.
 		Coffee coffee = coffeeRepository.findById(orderRequestDto.getCoffeeId())
@@ -55,6 +58,11 @@ public class OrderService {
 		order.setPrice(coffee.getPrice());
 		order.setOrderId(generateNewOrderId());
 		System.out.println(order.getOrderId());
+		if ((user.getMoney() - coffee.getPrice()) < 0) {
+			throw new IllegalArgumentException("잔액이 부족합니다.");
+		} else {
+			user.setMoney(user.getMoney() - coffee.getPrice());
+		}
 
 		// 저장
 		orderRepository.save(order);

@@ -192,4 +192,18 @@ public class JwtUtil {
 		}
 		return null;
 	}
+
+	public String resolveTokenFromCookies(HttpServletRequest request) {
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				if (JwtUtil.AUTHORIZATION_HEADER.equals(cookie.getName())) {
+					String token = cookie.getValue();
+					// %20을 공백으로 변환
+					token = token.replace("%20", " ");
+					return substringToken(token);
+				}
+			}
+		}
+		return null;
+	}
 }

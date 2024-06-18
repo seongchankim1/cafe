@@ -77,18 +77,55 @@
     </style>
 </head>
 <body>
-
+<div id="money-info" style="position: fixed; top: 20px; right: 20px;">
+    <h2>잔액: <span id="money">로딩 중...</span>원</h2>
+</div>
 <!-- 주문 페이지의 카드를 렌더링할 컨테이너 -->
 <div id="coffee-container"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        let username = '';
+        let money = 0; // 사용자 잔액 초기화
+
+        // 사용자 정보를 가져오는 함수
+        function fetchUserInfo() {
+            return fetch('/api/user/info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('사용자 정보를 가져오지 못했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    username = data.username;
+                    money = data.money; // 사용자 잔액 업데이트
+                    updateMoneyInfo(); // 잔액 정보 업데이트
+                })
+                .catch(err => {
+                    console.error('사용자 정보 가져오기 실패:', err);
+                    alert('사용자 정보를 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+                });
+        }
+
+        // 잔액 정보 업데이트 함수
+        function updateMoneyInfo() {
+            const moneyInfo = document.getElementById('money');
+            moneyInfo.textContent = money.toLocaleString(); // 잔액 텍스트 업데이트
+        }
+
         // 커피 목록을 가져오는 함수
         function fetchCoffees() {
-            fetch('/api/cafe/coffees')
-                .then(response => response.json())
-                .then(data => {
-                    renderCoffeeCards(data);
+            return fetch('/api/cafe/coffees')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('커피 목록을 가져오지 못했습니다.');
+                    }
+                    return response.json();
+                })
+                .catch(err => {
+                    console.error('커피 목록 가져오기 실패:', err);
+                    alert('커피 목록을 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
                 });
         }
 
@@ -116,7 +153,6 @@
 
         // 커피 주문을 처리하는 함수
         function orderCoffee(coffeeId, coffeeName, price) {
-            const username = prompt(`${coffeeName}를 주문하시겠습니까? 이름을 입력해주세요:`);
             if (username) {
                 const orderRequestDto = {
                     username: username,
@@ -137,12 +173,25 @@
                         } else {
                             alert('주문 접수에 실패했습니다. 다시 시도해주세요.');
                         }
+                    })
+                    .catch(err => {
+                        console.error('주문 처리 실패:', err);
+                        alert('주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
                     });
+            } else {
+                alert('사용자 정보를 가져오는 데 실패했습니다. 다시 시도해주세요.');
             }
         }
 
-        // 초기 커피 목록 가져오기
-        fetchCoffees();
+        // 초기 데이터 가져오기
+        Promise.all([fetchUserInfo(), fetchCoffees()])
+            .then(([, coffees]) => {
+                renderCoffeeCards(coffees);
+            })
+            .catch(err => {
+                console.error('초기 데이터 가져오기 실패:', err);
+                alert('초기 데이터를 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+            });
 
         // 전역 스코프에 orderCoffee 함수를 노출
         window.orderCoffee = orderCoffee;

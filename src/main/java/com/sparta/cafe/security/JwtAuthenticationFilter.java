@@ -1,13 +1,11 @@
 package com.sparta.cafe.security;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -71,9 +69,12 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 		String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
 		UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-		String token = jwtUtil.createAccessToken(username, role);
-		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-		jwtUtil.addJwtToCookie(token, response);
+		String accessToken = jwtUtil.createAccessToken(username, role);
+		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+		jwtUtil.addJwtToCookie(accessToken, response);
+		String refreshToken = jwtUtil.createRefreshToken(accessToken, role);
+		User user = userRepository.findByUsername(username);
+		user.setRefreshToken(refreshToken);
 	}
 
 	// 인증 실패 처리

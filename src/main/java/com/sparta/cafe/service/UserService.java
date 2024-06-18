@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.sparta.cafe.dto.LoginRequestDto;
 import com.sparta.cafe.dto.SignupRequestDto;
+import com.sparta.cafe.dto.UserDto;
 import com.sparta.cafe.entity.User;
 import com.sparta.cafe.entity.UserRoleEnum;
 import com.sparta.cafe.jwt.JwtUtil;
 import com.sparta.cafe.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
@@ -72,8 +74,22 @@ public class UserService {
 		User user = new User(requestDto.getUsername(), requestDto.getPassword(), requestDto.getPhone());
 		user.setRole(UserRoleEnum.USER);
 		user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+		user.setMoney(0);
 		userRepository.save(user);
 
 		return true;
 	}
+
+	public UserDto getUserInfo(String username) {
+		User user = userRepository.findByUsername(username);
+		UserDto userDto = new UserDto(user);
+		return userDto;
+	}
+
+	public String getUsernameFromToken(HttpServletRequest request) {
+		String token = jwtUtil.resolveTokenFromCookies(request);
+		String username = jwtUtil.getUserInfoFromToken(token).getSubject();
+		return username;
+	}
+
 }

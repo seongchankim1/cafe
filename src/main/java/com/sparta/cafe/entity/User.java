@@ -47,10 +47,14 @@ public class User extends Timestamped {
 	@Enumerated(value = EnumType.STRING)
 	private UserRoleEnum role;
 
+	@Column(nullable = false)
+	private int money;
+
 	public User(User user) {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.orderList = user.getOrderList();
+		this.money = user.getMoney();
 	}
 
 	public User(String username, String password, String phoneNumber) {

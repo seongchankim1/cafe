@@ -1,39 +1,24 @@
 package com.sparta.cafe.controller;
 
-import java.io.IOException;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sparta.cafe.dto.LoginRequestDto;
-import com.sparta.cafe.dto.SignupRequestDto;
+import com.sparta.cafe.dto.UserDto;
 import com.sparta.cafe.service.UserService;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 public class UserController {
 
-	private final UserService userService;
+	@Autowired
+	private UserService userService;
 
-	public UserController(UserService userService) {
-		this.userService = userService;
+	@GetMapping("/api/user/info")
+	public UserDto getUserInfo(HttpServletRequest request) {
+		String username = userService.getUsernameFromToken(request);
+		return userService.getUserInfo(username);
 	}
-
-	@PostMapping("/user/signup")
-	public void signup(@RequestBody SignupRequestDto requestDto, HttpServletResponse response) throws IOException {
-		boolean isSignupSuccessful = userService.signup(requestDto);
-
-		if (isSignupSuccessful) {
-			// 회원가입 성공 시 로그인 페이지로 리디렉션
-			response.sendRedirect("/user/login");
-		} else {
-			// 회원가입 실패 시 적절한 처리
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "회원가입 실패");
-		}
-	}
-
 }
