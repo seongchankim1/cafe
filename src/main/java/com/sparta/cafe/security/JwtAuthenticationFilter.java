@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 		String refreshToken = jwtUtil.createRefreshToken(accessToken, role);
 		User user = userRepository.findByUsername(username);
 		user.setRefreshToken(refreshToken);
+		userRepository.save(user);
 	}
 
 	// 인증 실패 처리
