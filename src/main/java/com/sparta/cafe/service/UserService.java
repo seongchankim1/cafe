@@ -29,33 +29,33 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	// 로그인
-	public boolean login(LoginRequestDto requestDto, HttpServletResponse response) {
-
-		String username = requestDto.getUsername();
-		String password = requestDto.getPassword();
-		User user = userRepository.findByUsername(username);
-		UserRoleEnum role = user.getRole();
-		if (user != null) {
-
-			System.out.println("로그인 시도중. 이름 : " + user.getUsername());
-
-			if (!passwordEncoder.matches(password, user.getPassword())) {
-				throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-			}
-
-			String accessToken = jwtUtil.createAccessToken(username, role);
-			response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
-
-			String refreshToken = jwtUtil.createRefreshToken(username, role); // 리프레시 토큰 생성
-			user.setRefreshToken(refreshToken);
-			userRepository.save(user);
-			return true;
-		} else {
-			throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-		}
-
-	}
+	// 로그인은 security로 넘어감
+	// public boolean login(LoginRequestDto requestDto, HttpServletResponse response) {
+	//
+	// 	String username = requestDto.getUsername();
+	// 	String password = requestDto.getPassword();
+	// 	User user = userRepository.findByUsername(username);
+	// 	UserRoleEnum role = user.getRole();
+	// 	if (user != null) {
+	//
+	// 		System.out.println("로그인 시도중. 이름 : " + user.getUsername());
+	//
+	// 		if (!passwordEncoder.matches(password, user.getPassword())) {
+	// 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+	// 		}
+	//
+	// 		String accessToken = jwtUtil.createAccessToken(username, role);
+	// 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+	//
+	// 		String refreshToken = jwtUtil.createRefreshToken(username, role); // 리프레시 토큰 생성
+	// 		user.setRefreshToken(refreshToken);
+	// 		userRepository.save(user);
+	// 		return true;
+	// 	} else {
+	// 		throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+	// 	}
+	//
+	// }
 
 	public boolean signup(SignupRequestDto requestDto) {
 		// 회원 중복 확인

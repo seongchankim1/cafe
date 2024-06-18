@@ -39,11 +39,9 @@ public class OrderService {
 
 	@Transactional
 	public OrderResponseDto addOrder(OrderRequestDto orderRequestDto) {
-		// 커피 정보를 불러와서 설정합니다.
 		Coffee coffee = coffeeRepository.findById(orderRequestDto.getCoffeeId())
 			.orElseThrow(() -> new IllegalArgumentException("커피를 찾을 수 없습니다."));
 
-		// 유저 정보를 불러와서 설정합니다.
 		if (!userRepository.existsByUsername(orderRequestDto.getUsername())) {
 			User user = new User();
 			user.setUsername(orderRequestDto.getUsername());
@@ -51,13 +49,13 @@ public class OrderService {
 		}
 		User user = userRepository.findByUsername(orderRequestDto.getUsername());
 
-		// Order Entity 생성
 		Order order = new Order(orderRequestDto, user, coffee);
 		order.setCoffee(coffee);
 		order.setUser(user);
 		order.setPrice(coffee.getPrice());
 		order.setOrderId(generateNewOrderId());
 		System.out.println(order.getOrderId());
+		// 키오스크는 돈이 차감되지 않음
 		if ((user.getMoney() - coffee.getPrice()) < 0 && !user.getUsername().equals("kiosk")) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
 		} else if (user.getUsername().equals("kiosk")) {
@@ -65,13 +63,12 @@ public class OrderService {
 			user.setMoney(user.getMoney() - coffee.getPrice());
 		}
 
-		// 저장
 		orderRepository.save(order);
 
-		// Return
 		return new OrderResponseDto(order);
 	}
 
+		// 빈 번호 중에 가장 작은 번호를 부여
 	private Long generateNewOrderId() {
 		List<Long> orderIds = orderRepository.findAll().stream()
 			.map(Order::getOrderId)

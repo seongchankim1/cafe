@@ -83,7 +83,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
 		// 상태 코드 401
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		// 실패 메시지 출력
 		response.getWriter().write("Login failed");
 	}
 }

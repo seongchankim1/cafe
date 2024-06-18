@@ -33,7 +33,7 @@ public class HomeController {
 
 	@GetMapping("/display")
 	public String getDisplayPage() {
-		return "index"; // index.html 파일의 이름
+		return "index";
 	}
 
 	@GetMapping("/home")
@@ -51,7 +51,7 @@ public class HomeController {
 		String token = jwtUtil.resolveTokenFromCookies(request);
 		User user = userRepository.findByUsername(jwtUtil.getUserInfoFromToken(token).getSubject());
 		if (user.getRole() == UserRoleEnum.ADMIN || user.getRole() == UserRoleEnum.STAFF) {
-			return "delete"; // delete.html 파일의 이름
+			return "delete";
 		} else {
 			return "order";
 		}

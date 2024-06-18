@@ -50,9 +50,9 @@ public class OrderController {
 		return orderService.getCompletedOrders();
 	}
 
-	@GetMapping("/delete") // delete에 대한 핸들러 추가
+	@GetMapping("/delete")
 	public String getDeletePage() {
-		return "delete"; // delete 파일을 반환
+		return "delete";
 	}
 
 	@GetMapping("/coffees")
