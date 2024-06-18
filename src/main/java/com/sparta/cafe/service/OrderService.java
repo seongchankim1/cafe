@@ -107,6 +107,7 @@ public class OrderService {
 		completeOrder.setUser(order.getUser());
 		completeOrder.setCoffee(order.getCoffee());
 		completeOrder.setPrice(order.getPrice());
+		completeOrder.setCoffeeName(order.getCoffeeName());
 		completeOrderRepository.save(completeOrder);
 	}
 
