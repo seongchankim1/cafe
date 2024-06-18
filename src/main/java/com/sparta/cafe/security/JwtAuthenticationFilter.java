@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.cafe.dto.LoginRequestDto;
 import com.sparta.cafe.entity.User;
 import com.sparta.cafe.jwt.JwtUtil;
 import com.sparta.cafe.repository.UserRepository;
@@ -46,7 +47,10 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 		Map<String, String> requestBody = objectMapper.readValue(request.getInputStream(), Map.class);
 		String username = requestBody.get("username");
 		String password = requestBody.get("password");
-		userService.login(username,password,response);
+		LoginRequestDto requestDto = new LoginRequestDto();
+		requestDto.setUsername(username);
+		requestDto.setPassword(password);
+		userService.login(requestDto, response);
 		// 인증 토큰 생성
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 		// AuthenticationManager 통해 인증 시도

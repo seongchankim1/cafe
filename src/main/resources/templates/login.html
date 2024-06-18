@@ -10,7 +10,7 @@
 <div class="login-container">
     <div class="login-box">
         <h2>Login</h2>
-        <form method="post" action="/login">
+        <form id="login-form">
             <div class="input-group">
                 <label for="username">이름</label>
                 <input type="text" id="username" name="username" required>
@@ -55,12 +55,12 @@
 </div>
 
 <script>
-    // 모달 스크립트
     document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('signup-modal');
         const openModal = document.querySelector('.signup-link a');
         const closeModal = document.querySelector('.close-button');
         const signupForm = document.getElementById('signup-form');
+        const loginForm = document.getElementById('login-form');
 
         openModal.addEventListener('click', (e) => {
             e.preventDefault();
@@ -101,11 +101,44 @@
                     alert('회원가입이 완료되었습니다!');
                     window.location.href = '/user/login';
                 } else {
-                    alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+                    const errorData = await response.json();
+                    alert(`회원가입에 실패했습니다: ${errorData.message}`);
+
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('회원가입 요청 중 오류가 발생했습니다.');
+            }
+        });
+
+        // 로그인 폼 제출 핸들러
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(loginForm);
+            const data = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('로그인이 성공하였습니다!');
+                    window.location.href = '/user/order';
+                } else {
+                    alert('로그인에 실패했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('로그인 요청 중 오류가 발생했습니다.');
             }
         });
     });

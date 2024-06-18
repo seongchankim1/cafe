@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sparta.cafe.dto.LoginRequestDto;
 import com.sparta.cafe.dto.SignupRequestDto;
 import com.sparta.cafe.entity.User;
 import com.sparta.cafe.entity.UserRoleEnum;
@@ -27,8 +28,10 @@ public class UserService {
 
 
 	// 로그인
-	public String login(String username, String password, HttpServletResponse response) {
+	public boolean login(LoginRequestDto requestDto, HttpServletResponse response) {
 
+		String username = requestDto.getUsername();
+		String password = requestDto.getPassword();
 		User user = userRepository.findByUsername(username);
 		if (user != null) {
 
@@ -43,7 +46,7 @@ public class UserService {
 			String refreshToken = jwtUtil.createRefreshToken(username); // 리프레시 토큰 생성
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
-			return "로그인 성공! 토큰 : " + refreshToken;
+			return true;
 		} else {
 			throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
 		}
