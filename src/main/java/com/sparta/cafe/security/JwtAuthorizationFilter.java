@@ -1,6 +1,7 @@
 package com.sparta.cafe.security;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import com.sparta.cafe.jwt.JwtUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -26,8 +28,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	// 필터 실행
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		if (request.getCookies() != null) {
+			Arrays.stream(request.getCookies())
+				.forEach(cookie -> System.out.println(cookie.getName() + ": " + cookie.getValue()));
+		}
 		// 요청에서 JWT 토큰 추출
-		String token = jwtUtil.resolveToken(request);
+		String token = resolveTokenFromCookies(request);
 
 		// 토큰 유효성 검사
 		if (token != null && jwtUtil.validateToken(token)) {
@@ -40,5 +46,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 		// 다음 필터 실행
 		chain.doFilter(request, response);
+	}
+
+
+	private String resolveTokenFromCookies(HttpServletRequest request) {
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				if (JwtUtil.AUTHORIZATION_HEADER.equals(cookie.getName())) {
+					String token = cookie.getValue();
+					// %20을 공백으로 변환
+					token = token.replace("%20", " ");
+					return jwtUtil.substringToken(token);
+				}
+			}
+		}
+		return null;
 	}
 }

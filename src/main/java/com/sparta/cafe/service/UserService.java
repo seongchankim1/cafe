@@ -1,5 +1,6 @@
 package com.sparta.cafe.service;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,11 @@ public class UserService {
 	private final JwtUtil jwtUtil;
 	private final PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
+	public UserService(UserRepository userRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.jwtUtil = jwtUtil;
-		this.passwordEncoder = new BCryptPasswordEncoder();
+		this.passwordEncoder = passwordEncoder;
 	}
-
 
 	// 로그인
 	public boolean login(LoginRequestDto requestDto, HttpServletResponse response) {
@@ -33,6 +33,7 @@ public class UserService {
 		String username = requestDto.getUsername();
 		String password = requestDto.getPassword();
 		User user = userRepository.findByUsername(username);
+		UserRoleEnum role = user.getRole();
 		if (user != null) {
 
 			System.out.println("로그인 시도중. 이름 : " + user.getUsername());
@@ -40,10 +41,11 @@ public class UserService {
 			if (!passwordEncoder.matches(password, user.getPassword())) {
 				throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 			}
-			String accessToken = jwtUtil.createAccessToken(username);
+
+			String accessToken = jwtUtil.createAccessToken(username, role);
 			response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
 
-			String refreshToken = jwtUtil.createRefreshToken(username); // 리프레시 토큰 생성
+			String refreshToken = jwtUtil.createRefreshToken(username, role); // 리프레시 토큰 생성
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
 			return true;

@@ -2,6 +2,7 @@ package com.sparta.cafe.controller;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +14,7 @@ import com.sparta.cafe.service.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-@RestController
+@Controller
 public class UserController {
 
 	private final UserService userService;
@@ -35,16 +36,4 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/user/login")
-	public void login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) throws IOException {
-		boolean isLoginSuccessful = userService.login(requestDto, response);
-
-		if (isLoginSuccessful) {
-			// 로그인 성공 시 주문 페이지로 리디렉션
-			response.sendRedirect("/user/order");
-		} else {
-			// 로그인 실패 시 적절한 처리
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "로그인 실패");
-		}
-	}
 }

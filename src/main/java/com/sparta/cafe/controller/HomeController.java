@@ -30,8 +30,8 @@ public class HomeController {
 		return "order";
 	}
 
-	@GetMapping("/user/login")
-	public String login() {
+	@GetMapping("/user/login-page")
+	public String loginPage() {
 		return "login";
 	}
 
