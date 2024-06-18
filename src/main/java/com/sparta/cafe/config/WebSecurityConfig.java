@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 안씀
 			.authorizeHttpRequests(authorize -> authorize
 				// 특정 경로에 대한 접근 권한 설정
-				.requestMatchers("/user/signup", "/user/login", "/user/login-page").permitAll()
+				.requestMatchers("/user/signup", "/user/login", "/user/login-page", "/home").permitAll()
 				.requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 				.anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
 			)

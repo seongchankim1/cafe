@@ -166,7 +166,7 @@ public class JwtUtil {
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		} catch (Exception e) {
-			throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+			return null;
 		}
 	}
 
@@ -206,4 +206,5 @@ public class JwtUtil {
 		}
 		return null;
 	}
+
 }

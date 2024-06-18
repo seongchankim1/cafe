@@ -58,8 +58,9 @@ public class OrderService {
 		order.setPrice(coffee.getPrice());
 		order.setOrderId(generateNewOrderId());
 		System.out.println(order.getOrderId());
-		if ((user.getMoney() - coffee.getPrice()) < 0) {
+		if ((user.getMoney() - coffee.getPrice()) < 0 && !user.getUsername().equals("kiosk")) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
+		} else if (user.getUsername().equals("kiosk")) {
 		} else {
 			user.setMoney(user.getMoney() - coffee.getPrice());
 		}
@@ -92,8 +93,6 @@ public class OrderService {
 			.map(OrderResponseDto::new)
 			.collect(Collectors.toList());
 	}
-
-
 
 	public int deleteOrder(Long id) {
 		Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));

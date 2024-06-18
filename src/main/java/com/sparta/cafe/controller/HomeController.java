@@ -12,6 +12,7 @@ import com.sparta.cafe.entity.User;
 import com.sparta.cafe.entity.UserRoleEnum;
 import com.sparta.cafe.jwt.JwtUtil;
 import com.sparta.cafe.repository.UserRepository;
+import com.sparta.cafe.security.UserDetailsImpl;
 import com.sparta.cafe.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,9 +31,19 @@ public class HomeController {
 		this.userRepository = userRepository;
 	}
 
-	@GetMapping("/")
-	public String getIndexPage() {
+	@GetMapping("/display")
+	public String getDisplayPage() {
 		return "index"; // index.html 파일의 이름
+	}
+
+	@GetMapping("/home")
+	public void getLoginOrOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String token = jwtUtil.resolveTokenFromCookies(request);
+		if (jwtUtil.validateToken(token)) {
+			response.sendRedirect("/order");
+		} else {
+			response.sendRedirect("/user/login-page");
+		}
 	}
 
 	@GetMapping("/delete")
@@ -47,8 +58,8 @@ public class HomeController {
 	}
 
 	@GetMapping("/order")
-	public String getOrderPage() {
-		return "order";
+	public String getOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			return "order";
 	}
 
 	@GetMapping("/user/login-page")
