@@ -36,7 +36,7 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
 	private final long ACCESS_TIME = 60 * 60 * 1000L; // 60분
-	private final long REFRESH_TIME = 30 * 24 * 60 * 60 * 1000L; // 30일
+	private final long REFRESH_TIME = 14 * 24 * 60 * 60 * 1000L; // 14일
 	private final UserRepository userRepository;
 	private final UserDetailsService userDetailsService;
 

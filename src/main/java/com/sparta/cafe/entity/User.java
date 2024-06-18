@@ -34,7 +34,7 @@ public class User extends Timestamped {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Order> orderList = new ArrayList<>();
 
-	@Column
+	@Column(length = 512)
 	private String refreshToken;
 
 	@Column(nullable = false)
