@@ -1,6 +1,7 @@
 package com.sparta.cafe.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sparta.cafe.dto.CoffeeResponseDto;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
+import com.sparta.cafe.entity.CompleteOrder;
 import com.sparta.cafe.service.CoffeeService;
 import com.sparta.cafe.service.OrderService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/cafe")
@@ -46,8 +46,8 @@ public class OrderController {
 	}
 
 	@GetMapping("/completed-orders")
-	public List<Long> getCompletedOrders() {
-		return orderService.getCompletedOrders();
+	public List<CompleteOrder> getCompleteOrders() {
+		return orderService.getCompleteOrders();
 	}
 
 	@GetMapping("/delete")
