@@ -1,6 +1,7 @@
 package com.sparta.cafe.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class OrderController {
 	}
 
 	@GetMapping("/completed-orders")
-	public List<Long> getCompletedOrders() {
+	public Map<Long, String> getCompletedOrders() {
 		return orderService.getCompletedOrders();
 	}
 

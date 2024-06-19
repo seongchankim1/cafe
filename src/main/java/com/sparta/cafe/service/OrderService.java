@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sparta.cafe.dto.OrderRequestDto;
@@ -28,7 +30,8 @@ public class OrderService {
 	private final CoffeeRepository coffeeRepository;
 	private final UserRepository userRepository;
 	private final CompleteOrderRepository completeOrderRepository;
-	private List<Long> completeList = new ArrayList<>();
+	private Map<Long, String> completeList = new HashMap<>();
+	Long orderId = 1L;
 
 	public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, UserRepository userRepository, CompleteOrderRepository completeOrderRepository) {
 		this.orderRepository = orderRepository;
@@ -68,21 +71,12 @@ public class OrderService {
 		return new OrderResponseDto(order);
 	}
 
-		// 빈 번호 중에 가장 작은 번호를 부여
+	// 빈 번호 중에 가장 작은 번호를 부여
 	private Long generateNewOrderId() {
-		List<Long> orderIds = orderRepository.findAll().stream()
-			.map(Order::getOrderId)
-			.sorted()
-			.toList();
-
-		Long newOrderId = 1L;
-		for (Long id : orderIds) {
-			if (!id.equals(newOrderId)) {
-				break;
-			}
-			newOrderId++;
+		while (orderRepository.existsById(orderId)) {
+			orderId++;
 		}
-		return newOrderId;
+		return orderId;
 	}
 
 	public List<OrderResponseDto> getAllOrders() {
@@ -95,13 +89,11 @@ public class OrderService {
 		Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 		completeOrder(order);
 		orderRepository.deleteById(id);
-		completeList.add(id);
-		completeList.sort(Collections.reverseOrder());
-
+		completeList.put(id, order.getCoffee().getCoffeeName());
 		return id.intValue();
 	}
 
-	public List<Long> getCompletedOrders() {
+	public Map<Long, String> getCompletedOrders() {
 		return completeList;
 	}
 
@@ -114,5 +106,4 @@ public class OrderService {
 		completeOrder.setCoffeeName(order.getCoffeeName());
 		completeOrderRepository.save(completeOrder);
 	}
-
 }

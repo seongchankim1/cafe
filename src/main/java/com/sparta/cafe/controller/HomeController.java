@@ -12,7 +12,6 @@ import com.sparta.cafe.entity.User;
 import com.sparta.cafe.entity.UserRoleEnum;
 import com.sparta.cafe.jwt.JwtUtil;
 import com.sparta.cafe.repository.UserRepository;
-import com.sparta.cafe.security.UserDetailsImpl;
 import com.sparta.cafe.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,10 +32,10 @@ public class HomeController {
 
 	@GetMapping("/display")
 	public String getDisplayPage() {
-		return "index";
+		return "display";
 	}
 
-	@GetMapping("/home")
+	@GetMapping("/")
 	public void getLoginOrOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = jwtUtil.resolveTokenFromCookies(request);
 		if (jwtUtil.validateToken(token)) {
