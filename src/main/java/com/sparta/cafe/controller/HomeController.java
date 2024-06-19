@@ -80,4 +80,8 @@ public class HomeController {
 		}
 	}
 
+	@GetMapping("/database")
+	public String databasePage() {
+		return "database";
+	}
 }
