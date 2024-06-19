@@ -3,11 +3,8 @@ package com.sparta.cafe.service;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sparta.cafe.dto.OrderRequestDto;
@@ -30,7 +27,7 @@ public class OrderService {
 	private final CoffeeRepository coffeeRepository;
 	private final UserRepository userRepository;
 	private final CompleteOrderRepository completeOrderRepository;
-	private Map<Long, String> completeList = new HashMap<>();
+	private List<CompleteOrder> completeList = new ArrayList<>();
 	Long orderId = 1L;
 
 	public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, UserRepository userRepository, CompleteOrderRepository completeOrderRepository) {
@@ -73,10 +70,13 @@ public class OrderService {
 
 	// 빈 번호 중에 가장 작은 번호를 부여
 	private Long generateNewOrderId() {
+		if (orderId > 20) {
+			orderId = 1L;
+		}
 		while (orderRepository.existsById(orderId)) {
 			orderId++;
 		}
-		return orderId;
+		return orderId++;
 	}
 
 	public List<OrderResponseDto> getAllOrders() {
@@ -89,12 +89,19 @@ public class OrderService {
 		Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 		completeOrder(order);
 		orderRepository.deleteById(id);
-		completeList.put(id, order.getCoffee().getCoffeeName());
+
+		CompleteOrder completeOrder = new CompleteOrder();
+		completeOrder.setOrderId(id);
+		completeOrder.setCoffeeName(order.getCoffee().getCoffeeName());
+		completeList.add(completeOrder);
+
 		return id.intValue();
 	}
 
-	public Map<Long, String> getCompletedOrders() {
-		return completeList;
+	public List<CompleteOrder> getCompleteOrders() {
+		List<CompleteOrder> reversedList = new ArrayList<>(completeList);
+		Collections.reverse(reversedList);
+		return reversedList;
 	}
 
 	public void completeOrder(Order order) {

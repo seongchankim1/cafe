@@ -46,12 +46,13 @@ public class HomeController {
 	}
 
 	@GetMapping("/delete")
-	public String getDeletePage(HttpServletRequest request) {
+	public String getDeletePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = jwtUtil.resolveTokenFromCookies(request);
 		User user = userRepository.findByUsername(jwtUtil.getUserInfoFromToken(token).getSubject());
 		if (user.getRole() == UserRoleEnum.ADMIN || user.getRole() == UserRoleEnum.STAFF) {
 			return "delete";
 		} else {
+			response.sendRedirect("/order");
 			return "order";
 		}
 	}
@@ -78,6 +79,5 @@ public class HomeController {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "회원가입 실패");
 		}
 	}
-
 
 }

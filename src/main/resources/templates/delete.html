@@ -106,6 +106,12 @@
 </div>
 <script>
     // 페이지 로드 시 대기 중인 주문 목록을 가져와서 표시합니다
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchPendingOrders();
+        // 5초마다 fetchPendingOrders 함수를 호출합니다
+        setInterval(fetchPendingOrders, 5000);
+    });
+
     document.addEventListener('DOMContentLoaded', fetchPendingOrders);
 
     function fetchPendingOrders() {
@@ -165,6 +171,7 @@
                 }
             });
     }
+
 </script>
 </body>
 </html>
