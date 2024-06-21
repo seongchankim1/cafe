@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커피 주문 페이지</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            background-color: #eae0d5; /* 나무 느낌의 밝은 갈색 배경 */
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        #coffee-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .card {
+            flex: 1 1 calc(33.333% - 40px);
+            background-color: #f5f0e6; /* 나무 느낌의 밝은 갈색 */
+            border: 1px solid #b79e70; /* 나무 느낌의 테두리 색상 */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            overflow: hidden;
+            max-width: 300px;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #5a3e2b; /* 진한 갈색 글씨 */
+        }
+        .card-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #5a3e2b;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #8b4513; /* 나무 느낌의 진한 갈색 */
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #5a3e2b;
+        }
+        .delete-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #d9534f; /* 붉은 색상 */
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .delete-btn:hover {
+            background-color: #c9302c;
+        }
+        @media (max-width: 768px) {
+            .card {
+                flex: 1 1 calc(50% - 40px);
+            }
+        }
+        @media (max-width: 480px) {
+            .card {
+                flex: 1 1 100%;
+            }
+        }
+        #money-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #f5f0e6; /* 나무 느낌의 밝은 갈색 */
+            padding: 10px;
+            border: 1px solid #b79e70;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px; /* 잔액 박스의 너비와 동일하게 설정 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+        }
+    </style>
+</head>
+<body>
+<div id="money-info">
+    <h2>잔액: <span id="money">로딩 중...</span>원</h2>
+    <button class="delete-btn" onclick="location.href='/delete'">직원전용</button>
+</div>
+<div id="coffee-container"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let username = '';
+        let money = 0;
+
+        function fetchUserInfo() {
+            return fetch('/api/user/info')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('사용자 정보를 가져오지 못했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    username = data.username;
+                    money = data.money;
+                    updateMoneyInfo();
+                })
+                .catch(err => {
+                    console.error('사용자 정보 가져오기 실패:', err);
+                    alert('사용자 정보를 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+                });
+        }
+
+        function updateMoneyInfo() {
+            const moneyInfo = document.getElementById('money');
+            moneyInfo.textContent = money.toLocaleString();
+        }
+
+        function fetchCoffees() {
+            return fetch('/api/cafe/coffees')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('커피 목록을 가져오지 못했습니다.');
+                    }
+                    return response.json();
+                })
+                .catch(err => {
+                    console.error('커피 목록 가져오기 실패:', err);
+                    alert('커피 목록을 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+                });
+        }
+
+        function renderCoffeeCards(coffees) {
+            const container = document.getElementById('coffee-container');
+            container.innerHTML = '';
+
+            coffees.forEach(coffee => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                card.innerHTML = `
+                    <img src="${coffee.imageUrl}" class="card-img-top" alt="${coffee.coffeeName}">
+                    <div class="card-body">
+                        <h5 class="card-title">${coffee.coffeeName}</h5>
+                        <p class="card-text">${coffee.price}원</p>
+                        <button class="btn btn-primary" onclick="orderCoffee(${coffee.id}, '${coffee.coffeeName}', ${coffee.price})">주문하기</button>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function orderCoffee(coffeeId, coffeeName, price) {
+            if (username) {
+                const orderRequestDto = {
+                    username: username,
+                    coffeeId: coffeeId,
+                    price: price
+                };
+
+                fetch('/api/cafe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderRequestDto)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.orderId) {
+                            alert(`주문이 성공적으로 접수되었습니다. 주문 번호: ${data.orderId}`);
+                            location.reload();
+                        } else {
+                            alert('주문 접수에 실패했습니다. 잔액을 확인해주세요.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('주문 처리 실패:', err);
+                        alert('주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    });
+            } else {
+                alert('사용자 정보를 가져오는 데 실패했습니다. 다시 시도해주세요.');
+            }
+        }
+
+        Promise.all([fetchUserInfo(), fetchCoffees()])
+            .then(([, coffees]) => {
+                renderCoffeeCards(coffees);
+            })
+            .catch(err => {
+                console.error('초기 데이터 가져오기 실패:', err);
+                alert('초기 데이터를 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+            });
+
+        window.orderCoffee = orderCoffee;
+    });
+</script>
+</body>
+</html>
