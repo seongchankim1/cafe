@@ -17,6 +17,7 @@
             box-sizing: border-box;
         }
         .delete-form {
+            position: relative;
             background-color: white;
             padding: 20px;
             border-radius: 8px;
@@ -95,10 +96,20 @@
         .btn:hover {
             background-color: #004d40;
         }
+        .btn-secondary {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #888;
+        }
+        .btn-secondary:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
 <div class="delete-form">
+    <button class="btn btn-secondary" onclick="location.href='/display'">전광판</button>
     <h2>대기 중인 주문 목록</h2>
     <div id="pendingOrdersList">
         <!-- 여기에 대기 중인 주문 목록이 동적으로 추가될 것입니다 -->
@@ -111,8 +122,6 @@
         // 5초마다 fetchPendingOrders 함수를 호출합니다
         setInterval(fetchPendingOrders, 5000);
     });
-
-    document.addEventListener('DOMContentLoaded', fetchPendingOrders);
 
     function fetchPendingOrders() {
         fetch('/api/cafe/orders')
