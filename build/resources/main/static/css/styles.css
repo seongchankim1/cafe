@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+/* 기존 CSS */
 
 * {
     box-sizing: border-box;
@@ -143,4 +146,173 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* 새로운 CSS */
+body {
+    font-family: 'Nanum Gothic', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background-color: #3e2f2f;
+    color: #fff;
+    box-sizing: border-box;
+    overflow: hidden; /* 스크롤바 숨김 */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    width: 45%;
+}
+
+.menu, .orders, .info {
+    background-color: #3e2f2f;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.menu {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu li {
+    padding: 10px 0;
+    border-bottom: 1px solid #fff;
+    font-size: 2rem;
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 30px;
+}
+
+.menu .ice, .menu .hot, .menu .none {
+    margin-left: 10px;
+}
+
+.menu .ice {
+    color: blue;
+}
+
+.menu .hot {
+    color: red;
+}
+
+.menu .none {
+    color: #3e2f2f;
+}
+
+.order-number {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #d32f2f;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.orders h2 {
+    font-size: 3rem;
+}
+
+.orders .order-boxes {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.order-box {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    background: #5c4033;
+    border-radius: 4px;
+    width: 18%; /* 한 줄에 5개가 들어가도록 너비 조정 */
+    text-align: center;
+    padding: 10px 0; /* 패딩 조정 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.order-id {
+    font-size: 2rem; /* 글꼴 크기 조정 */
+}
+
+.order-name {
+    font-size: 1rem; /* 글꼴 크기 조정 */
+    margin-top: 5px;
+    color: #ffd700;
+}
+
+.info {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 설정 */
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.info h2 {
+    font-size: 3rem;
+}
+
+.info div {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info img {
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.info span {
+    vertical-align: middle;
+    font-size: 2rem;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 45%;
 }
