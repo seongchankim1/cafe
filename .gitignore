@@ -3,7 +3,7 @@
 Thumbs.db
 
 ### Gradle ###
-.gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
@@ -12,9 +12,9 @@ build/
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 bin/
 
 ### IntelliJ IDEA ###
@@ -23,6 +23,12 @@ bin/
 *.iml
 *.ipr
 out/
+build/
+
+# IntelliJ IDEA files
+**/executionHistory*
+**/fileHashes*
+**/fileHashes.lock
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,3 +39,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
+*.log
+
+### OS generated files ###
+.DS_Store
+Thumbs.db
