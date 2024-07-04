@@ -106,6 +106,58 @@
             width: 200px; /* 잔액 박스의 너비와 동일하게 설정 */
             text-align: center; /* 텍스트 중앙 정렬 */
         }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #f5f0e6;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #b79e70;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .modal-content label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            border: 1px solid #b79e70;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #8b4513;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background-color: #5a3e2b;
+        }
     </style>
 </head>
 <body>
@@ -115,10 +167,25 @@
 </div>
 <div id="coffee-container"></div>
 
+<!-- 주문 모달 -->
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <h2>주문 옵션 선택</h2>
+        <label for="strength">커피 강도:</label>
+        <select id="strength">
+            <option value="보통">보통</option>
+            <option value="연하게">연하게</option>
+            <option value="샷추가">샷추가 (+1000원)</option>
+        </select>
+        <button id="confirmOrderBtn">주문하기</button>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         let username = '';
         let money = 0;
+        let selectedCoffee = null;
 
         function fetchUserInfo() {
             return fetch('/api/user/info')
@@ -171,7 +238,7 @@
                     <div class="card-body">
                         <h5 class="card-title">${coffee.coffeeName}</h5>
                         <p class="card-text">${coffee.price}원</p>
-                        <button class="btn btn-primary" onclick="orderCoffee(${coffee.id}, '${coffee.coffeeName}', ${coffee.price})">주문하기</button>
+                        <button class="btn btn-primary" onclick="openOrderModal(${coffee.id}, '${coffee.coffeeName}', ${coffee.price})">주문하기</button>
                     </div>
                 `;
 
@@ -179,12 +246,22 @@
             });
         }
 
-        function orderCoffee(coffeeId, coffeeName, price) {
+        function openOrderModal(coffeeId, coffeeName, price) {
+            selectedCoffee = { coffeeId, coffeeName, price };
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        function orderCoffee(coffeeId, coffeeName, price, strength) {
             if (username) {
                 const orderRequestDto = {
                     username: username,
                     coffeeId: coffeeId,
-                    price: price
+                    price: price,
+                    strength: strength
                 };
 
                 fetch('/api/cafe', {
@@ -212,6 +289,16 @@
             }
         }
 
+        document.getElementById('confirmOrderBtn').addEventListener('click', () => {
+            const strength = document.getElementById('strength').value;
+            if (selectedCoffee) {
+                orderCoffee(selectedCoffee.coffeeId, selectedCoffee.coffeeName, selectedCoffee.price, strength);
+                closeOrderModal();
+            }
+        });
+
+        window.openOrderModal = openOrderModal;
+
         Promise.all([fetchUserInfo(), fetchCoffees()])
             .then(([, coffees]) => {
                 renderCoffeeCards(coffees);
@@ -220,8 +307,6 @@
                 console.error('초기 데이터 가져오기 실패:', err);
                 alert('초기 데이터를 가져오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
             });
-
-        window.orderCoffee = orderCoffee;
     });
 </script>
 </body>

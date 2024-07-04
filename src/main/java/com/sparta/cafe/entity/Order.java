@@ -43,11 +43,14 @@ public class Order extends Timestamped {
 	@Column(nullable = false)
 	private String coffeeName;
 
+	private String strength;
+
 	// 생성자 추가
 	public Order(OrderRequestDto orderRequestDto, User user, Coffee coffee) {
 		this.price = orderRequestDto.getPrice();
 		this.username = user.getUsername();
 		this.coffeeName = coffee.getCoffeeName();
+		this.strength = orderRequestDto.getStrength();
 	}
 
 }

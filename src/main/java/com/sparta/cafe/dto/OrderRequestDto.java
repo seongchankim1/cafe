@@ -8,4 +8,5 @@ public class OrderRequestDto {
 	private String username;
 	private Long coffeeId;
 	private int price;
+	private String strength;
 }

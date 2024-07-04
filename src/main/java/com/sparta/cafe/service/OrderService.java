@@ -53,6 +53,9 @@ public class OrderService {
 		order.setCoffee(coffee);
 		order.setUser(user);
 		order.setPrice(coffee.getPrice());
+		if (orderRequestDto.getStrength().equals("샷추가")) {
+			order.setPrice(order.getPrice() + 1000);
+		}
 		order.setOrderId(generateNewOrderId());
 		System.out.println(order.getOrderId());
 		// 키오스크는 돈이 차감되지 않음
