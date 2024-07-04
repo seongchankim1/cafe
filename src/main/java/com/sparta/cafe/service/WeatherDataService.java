@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import com.sparta.cafe.entity.Weather;
@@ -34,7 +35,8 @@ public class WeatherDataService {
 
 	public Weather lookUpWeather() throws IOException, JSONException {
 		// 현재 날짜와 시간
-		LocalDateTime now = LocalDateTime.now();
+		ZoneId koreaZoneId = ZoneId.of("Asia/Seoul");
+		LocalDateTime now = LocalDateTime.now(koreaZoneId);
 		String baseDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		String baseTime = now.format(DateTimeFormatter.ofPattern("HH00"));
 
