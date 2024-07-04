@@ -100,7 +100,8 @@ public class UserService {
 	}
 
 	public UserResponseDto addMoney(MoneyRequestDto request) {
-		User user = userRepository.findByUsername(request.getUsername());
+		User user = userRepository.findById(request.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 		int newMoney = user.getMoney() + request.getAmount();
 		user.updateMoney(newMoney);
 		userRepository.save(user);

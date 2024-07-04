@@ -4,122 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DB 조회 페이지</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-        body {
-            font-family: 'Nanum Gothic', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .tabs {
-            display: flex;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .tab {
-            padding: 10px 20px;
-            margin-right: 10px;
-            background-color: #ddd;
-            border-radius: 5px;
-        }
-        .tab.active {
-            background-color: #8b4513;
-            color: #fff;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-        th {
-            background-color: #8b4513;
-            color: #fff;
-        }
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.2rem;
-        }
-        /* 모달 스타일 */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #f5f0e6;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #b79e70;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-        .modal-content label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-            color: #333;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            border-radius: 4px;
-            border: 1px solid #b79e70;
-        }
-        .modal-content button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: #fff;
-            background-color: #8b4513;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .modal-content button:hover {
-            background-color: #5a3e2b;
-        }
-        .add-money-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: #fff;
-            background-color: #8b4513;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .add-money-btn:hover {
-            background-color: #5a3e2b;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/database.css">
 </head>
 <body>
 <div class="tabs">
@@ -150,6 +35,7 @@
     <table id="users-table">
         <thead>
         <tr>
+            <th>선택</th>
             <th>번호</th>
             <th>생성날짜</th>
             <th>이름</th>
@@ -167,8 +53,6 @@
 <div id="addMoneyModal" class="modal">
     <div class="modal-content">
         <h2>돈 추가</h2>
-        <label for="username">사용자 이름:</label>
-        <input type="text" id="username" placeholder="이름을 입력하세요">
         <label for="amount">충전할 금액:</label>
         <input type="number" id="amount" placeholder="금액을 입력하세요">
         <button onclick="addMoney()">추가</button>
@@ -178,126 +62,6 @@
 
 <button class="add-money-btn" onclick="openModal()">돈 추가</button>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                tabContents.forEach(tc => tc.classList.remove('active'));
-                document.getElementById(tab.dataset.tab).classList.add('active');
-
-                // 각 탭에 맞는 데이터를 로드
-                if (tab.dataset.tab === 'complete-orders') {
-                    fetchCompleteOrders();
-                } else if (tab.dataset.tab === 'users') {
-                    fetchUsers();
-                }
-            });
-        });
-
-        // 페이지 로드 시 기본으로 완료된 주문 데이터를 로드
-        fetchCompleteOrders();
-    });
-
-    function fetchCompleteOrders() {
-        fetch('/api/database/complete')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.querySelector('#complete-orders-table tbody');
-                tableBody.innerHTML = '';
-
-                data.forEach(order => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                            <td>${order.completeOrderId}</td>
-                            <td>${new Date(order.createdAt).toLocaleString()}</td>
-                            <td>${order.coffeeName}</td>
-                            <td>${order.price.toLocaleString()}원</td>
-                            <td>${order.username}</td>
-                            <td>${order.strength}</td>
-                        `;
-                    tableBody.appendChild(row);
-                });
-
-                document.querySelector('#complete-orders .loading').style.display = 'none';
-            })
-            .catch(err => {
-                console.error('Failed to fetch complete orders:', err);
-                document.querySelector('#complete-orders .loading').textContent = '데이터를 가져오는 데 실패했습니다.';
-            });
-    }
-
-    function fetchUsers() {
-        fetch('/api/database/user')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.querySelector('#users-table tbody');
-                tableBody.innerHTML = '';
-
-                data.forEach(user => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                            <td>${user.id}</td>
-                            <td>${new Date(user.createdAt).toLocaleString()}</td>
-                            <td>${user.username}</td>
-                            <td>${user.money.toLocaleString()}원</td>
-                            <td>${user.phoneNumber}</td>
-                            <td>${user.role}</td>
-                        `;
-                    tableBody.appendChild(row);
-                });
-
-                document.querySelector('#users .loading').style.display = 'none';
-            })
-            .catch(err => {
-                console.error('Failed to fetch users:', err);
-                document.querySelector('#users .loading').textContent = '데이터를 가져오는 데 실패했습니다.';
-            });
-    }
-
-    function openModal() {
-        document.getElementById('addMoneyModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('addMoneyModal').style.display = 'none';
-    }
-
-    function addMoney() {
-        const username = document.getElementById('username').value;
-        const amount = document.getElementById('amount').value;
-
-        if (!username || !amount) {
-            alert('이름과 금액을 입력하세요.');
-            return;
-        }
-
-        fetch('/api/database/money', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, amount: parseInt(amount) })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('충전 완료!');
-                    closeModal();
-                    location.reload();
-                } else {
-                    alert('충전 실패. 다시 시도하세요.');
-                }
-            })
-            .catch(err => {
-                console.error('Failed to add money:', err);
-                alert('충전 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
-            });
-    }
-</script>
+<script src="/js/database.js"></script>
 </body>
 </html>

@@ -6,6 +6,6 @@ import lombok.Getter;
 @Data
 public class MoneyRequestDto {
 
-	private String username;
+	private Long userId;
 	private int amount;
 }
