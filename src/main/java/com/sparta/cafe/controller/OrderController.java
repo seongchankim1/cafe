@@ -59,4 +59,5 @@ public class OrderController {
 	public List<CoffeeResponseDto> getAllCoffees() {
 		return coffeeService.getAllCoffees();
 	}
+
 }

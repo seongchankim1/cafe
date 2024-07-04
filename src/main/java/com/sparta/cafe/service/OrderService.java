@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sparta.cafe.dto.CompleteOrderResponseDto;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
 import com.sparta.cafe.entity.Coffee;
@@ -115,5 +116,12 @@ public class OrderService {
 		completeOrder.setCoffeeName(order.getCoffeeName());
 		completeOrder.setStrength(order.getStrength());
 		completeOrderRepository.save(completeOrder);
+	}
+
+	public List<CompleteOrderResponseDto> getCompleteOrdersDB() {
+		return completeOrderRepository.findAllByOrderByCompleteIdDesc()
+			.stream()
+			.map(CompleteOrderResponseDto::new)
+			.collect(Collectors.toList());
 	}
 }

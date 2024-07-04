@@ -1,13 +1,18 @@
 package com.sparta.cafe.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sparta.cafe.dto.CompleteOrderResponseDto;
 import com.sparta.cafe.dto.LoginRequestDto;
 import com.sparta.cafe.dto.SignupRequestDto;
 import com.sparta.cafe.dto.UserDto;
+import com.sparta.cafe.dto.UserResponseDto;
 import com.sparta.cafe.entity.User;
 import com.sparta.cafe.entity.UserRoleEnum;
 import com.sparta.cafe.jwt.JwtUtil;
@@ -92,4 +97,9 @@ public class UserService {
 		return username;
 	}
 
+	public List<UserResponseDto> getUserDB() {
+		return userRepository.findAllByOrderByIdDesc().stream()
+			.map(UserResponseDto::new)
+			.collect(Collectors.toList());
+	}
 }

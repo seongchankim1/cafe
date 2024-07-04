@@ -58,7 +58,7 @@
 <body>
 <div class="tabs">
     <div class="tab active" data-tab="complete-orders">완료된 주문</div>
-    <div class="tab" data-tab="other-orders">다른 항목</div>
+    <div class="tab" data-tab="users">사용자</div>
 </div>
 <div id="complete-orders" class="tab-content active">
     <h2>완료된 주문</h2>
@@ -66,21 +66,35 @@
     <table id="complete-orders-table">
         <thead>
         <tr>
-            <th>완료 ID</th>
-            <th>생성 날짜</th>
+            <th>번호</th>
+            <th>주문 날짜</th>
             <th>커피 이름</th>
             <th>가격</th>
-            <th>사용자 ID</th>
-            <th>강도</th>
+            <th>고객 이름</th>
+            <th>샷</th>
         </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 </div>
-<div id="other-orders" class="tab-content">
-    <h2>다른 항목</h2>
-    <!-- 추가 항목 테이블 -->
+<div id="users" class="tab-content">
+    <h2>사용자</h2>
+    <div class="loading">로딩 중...</div>
+    <table id="users-table">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>생성날짜</th>
+            <th>이름</th>
+            <th>돈</th>
+            <th>전화 번호</th>
+            <th>역할</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
 
 <script>
@@ -95,14 +109,22 @@
 
                 tabContents.forEach(tc => tc.classList.remove('active'));
                 document.getElementById(tab.dataset.tab).classList.add('active');
+
+                // 각 탭에 맞는 데이터를 로드
+                if (tab.dataset.tab === 'complete-orders') {
+                    fetchCompleteOrders();
+                } else if (tab.dataset.tab === 'users') {
+                    fetchUsers();
+                }
             });
         });
 
+        // 페이지 로드 시 기본으로 완료된 주문 데이터를 로드
         fetchCompleteOrders();
     });
 
     function fetchCompleteOrders() {
-        fetch('/api/complete-orders')
+        fetch('/api/database/complete')
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector('#complete-orders-table tbody');
@@ -111,21 +133,49 @@
                 data.forEach(order => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                            <td>${order.complete_id}</td>
-                            <td>${order.created_at}</td>
-                            <td>${order.coffee_name}</td>
-                            <td>${order.price}</td>
-                            <td>${order.user_id}</td>
+                            <td>${order.completeOrderId}</td>
+                            <td>${new Date(order.createdAt).toLocaleString()}</td>
+                            <td>${order.coffeeName}</td>
+                            <td>${order.price.toLocaleString()}원</td>
+                            <td>${order.username}</td>
                             <td>${order.strength}</td>
                         `;
                     tableBody.appendChild(row);
                 });
 
-                document.querySelector('.loading').style.display = 'none';
+                document.querySelector('#complete-orders .loading').style.display = 'none';
             })
             .catch(err => {
                 console.error('Failed to fetch complete orders:', err);
-                document.querySelector('.loading').textContent = '데이터를 가져오는 데 실패했습니다.';
+                document.querySelector('#complete-orders .loading').textContent = '데이터를 가져오는 데 실패했습니다.';
+            });
+    }
+
+    function fetchUsers() {
+        fetch('/api/database/user')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#users-table tbody');
+                tableBody.innerHTML = '';
+
+                data.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${new Date(user.createdAt).toLocaleString()}</td>
+                            <td>${user.username}</td>
+                            <td>${user.money.toLocaleString()}원</td>
+                            <td>${user.phoneNumber}</td>
+                            <td>${user.role}</td>
+                        `;
+                    tableBody.appendChild(row);
+                });
+
+                document.querySelector('#users .loading').style.display = 'none';
+            })
+            .catch(err => {
+                console.error('Failed to fetch users:', err);
+                document.querySelector('#users .loading').textContent = '데이터를 가져오는 데 실패했습니다.';
             });
     }
 </script>
