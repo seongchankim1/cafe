@@ -1,6 +1,5 @@
 package com.sparta.cafe.entity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
@@ -61,5 +60,9 @@ public class User extends Timestamped {
 		this.username = username;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
+	}
+
+	public void updateMoney(int money) {
+		this.money = money;
 	}
 }
