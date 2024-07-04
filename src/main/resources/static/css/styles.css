@@ -309,9 +309,9 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* 왼쪽 정렬 설정 */
+    align-items: center; /* 세로 가운데 정렬 설정 */
     flex-grow: 1;
-    justify-content: flex-end;
+    justify-content: center; /* 세로 가운데 정렬 설정 */
 }
 
 .info h2 {
@@ -326,14 +326,14 @@ body {
 }
 
 .info img {
-    width: 50px;
+    width: 100px;
     vertical-align: middle;
     margin-right: 10px;
 }
 
 .info span {
     vertical-align: middle;
-    font-size: 2rem;
+    font-size: 4rem;
 }
 
 .right-section {
@@ -343,5 +343,3 @@ body {
     height: 100%;
     width: 45%;
 }
-
-
