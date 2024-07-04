@@ -43,11 +43,14 @@ public class CompleteOrder extends Timestamped {
 	@Column(nullable = false)
 	private String coffeeName;
 
-	public CompleteOrder(Coffee coffee, User user, int price, Long orderId) {
+	private String strength;
+
+	public CompleteOrder(Coffee coffee, User user, int price, Long orderId, String strength) {
 		this.coffee = coffee;
 		this.user = user;
 		this.price = price;
 		this.orderId = orderId;
 		this.coffeeName = coffee.getCoffeeName();
+		this.strength = strength;
 	}
 }

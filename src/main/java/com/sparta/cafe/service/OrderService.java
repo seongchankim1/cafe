@@ -59,11 +59,10 @@ public class OrderService {
 		order.setOrderId(generateNewOrderId());
 		System.out.println(order.getOrderId());
 		// 키오스크는 돈이 차감되지 않음
-		if ((user.getMoney() - coffee.getPrice()) < 0 && !user.getUsername().equals("kiosk")) {
+		if ((user.getMoney() - order.getPrice()) < 0 && !user.getUsername().equals("kiosk")) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
-		} else if (user.getUsername().equals("kiosk")) {
 		} else {
-			user.setMoney(user.getMoney() - coffee.getPrice());
+			user.setMoney(user.getMoney() - order.getPrice());
 		}
 
 		orderRepository.save(order);
@@ -114,6 +113,7 @@ public class OrderService {
 		completeOrder.setCoffee(order.getCoffee());
 		completeOrder.setPrice(order.getPrice());
 		completeOrder.setCoffeeName(order.getCoffeeName());
+		completeOrder.setStrength(order.getStrength());
 		completeOrderRepository.save(completeOrder);
 	}
 }

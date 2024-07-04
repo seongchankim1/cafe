@@ -13,6 +13,7 @@ public class OrderResponseDto {
 	private int price;
 	private String username;
 	private String coffeeName;
+	private String strength;
 
 	public OrderResponseDto(Order order) {
 		this.orderId = order.getOrderId();
@@ -21,6 +22,7 @@ public class OrderResponseDto {
 		this.price = order.getPrice();
 		this.username = order.getUser().getUsername(); // 사용자 이름 추가
 		this.coffeeName = order.getCoffee().getCoffeeName(); // 음료 이름 추가
+		this.strength = order.getStrength();
 	}
 
 }

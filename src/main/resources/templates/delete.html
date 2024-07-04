@@ -111,6 +111,11 @@
         .btn-notification:hover {
             background-color: #e65100;
         }
+        .strength-text {
+            color: #d9534f; /* Example color: reddish */
+            font-weight: bold; /* Optional: make the text bold */
+            font-size:1rem;
+        }
     </style>
 </head>
 <body>
@@ -158,15 +163,22 @@
                     cardText.className = 'card-text';
                     cardText.textContent = `고객: ${order.username}`;
 
+                    cardBody.appendChild(cardTitle);
+                    cardBody.appendChild(cardText);
+
+                    if (order.strength && (order.strength === '샷추가' || order.strength === '연하게')) {
+                        const strengthText = document.createElement('h5');
+                        strengthText.className = 'strength-text';
+                        strengthText.textContent = `${order.strength}`;
+                        cardBody.appendChild(strengthText);
+                    }
+
                     const btn = document.createElement('button');
                     btn.className = 'btn';
                     btn.textContent = '완료';
                     btn.onclick = () => deleteOrder(order.orderId);
 
-                    cardBody.appendChild(cardTitle);
-                    cardBody.appendChild(cardText);
                     cardBody.appendChild(btn);
-
                     card.appendChild(cardHeader);
                     card.appendChild(cardBody);
 
@@ -174,6 +186,7 @@
                 });
             });
     }
+
 
     function deleteOrder(orderId) {
         fetch(`/api/cafe/orders/${orderId}`, {

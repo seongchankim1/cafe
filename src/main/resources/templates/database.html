@@ -1,131 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafe Management</title>
+    <title>DB 조회 페이지</title>
     <style>
-        .tab {
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .tabs {
+            display: flex;
             cursor: pointer;
-            padding: 10px;
-            border: 1px solid #ccc;
-            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            margin-right: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
         }
         .tab.active {
-            background-color: #eee;
+            background-color: #8b4513;
+            color: #fff;
         }
-        .table-container {
+        .tab-content {
             display: none;
         }
-        .table-container.active {
+        .tab-content.active {
             display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #8b4513;
+            color: #fff;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
-<div>
-    <div id="tab-coffees" class="tab active">Coffees</div>
-    <div id="tab-complete-orders" class="tab">Complete Orders</div>
-    <div id="tab-orders" class="tab">Orders</div>
-    <div id="tab-users" class="tab">Users</div>
+<div class="tabs">
+    <div class="tab active" data-tab="complete-orders">완료된 주문</div>
+    <div class="tab" data-tab="other-orders">다른 항목</div>
 </div>
-<div id="table-coffees" class="table-container active">
-    <table>
+<div id="complete-orders" class="tab-content active">
+    <h2>완료된 주문</h2>
+    <div class="loading">로딩 중...</div>
+    <table id="complete-orders-table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Coffee Name</th>
-            <th>Price</th>
-            <th>Image URL</th>
+            <th>완료 ID</th>
+            <th>생성 날짜</th>
+            <th>커피 이름</th>
+            <th>가격</th>
+            <th>사용자 ID</th>
+            <th>강도</th>
         </tr>
         </thead>
-        <tbody id="coffees-body"></tbody>
+        <tbody>
+        </tbody>
     </table>
 </div>
-<div id="table-complete-orders" class="table-container">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Coffee Name</th>
-            <th>User</th>
-            <th>Price</th>
-            <th>Order ID</th>
-        </tr>
-        </thead>
-        <tbody id="complete-orders-body"></tbody>
-    </table>
+<div id="other-orders" class="tab-content">
+    <h2>다른 항목</h2>
+    <!-- 추가 항목 테이블 -->
 </div>
-<div id="table-orders" class="table-container">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Coffee Name</th>
-            <th>User</th>
-            <th>Price</th>
-        </tr>
-        </thead>
-        <tbody id="orders-body"></tbody>
-    </table>
-</div>
-<div id="table-users" class="table-container">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Phone Number</th>
-            <th>Role</th>
-            <th>Money</th>
-        </tr>
-        </thead>
-        <tbody id="users-body"></tbody>
-    </table>
-</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tabs = document.querySelectorAll('.tab');
-        const tables = document.querySelectorAll('.table-container');
+        const tabContents = document.querySelectorAll('.tab-content');
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                tables.forEach(table => table.classList.remove('active'));
-                document.getElementById(`table-${tab.id.split('-')[1]}`).classList.add('active');
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                document.getElementById(tab.dataset.tab).classList.add('active');
             });
         });
 
-        fetchTableData('coffees', '/api/tables/coffees');
-        fetchTableData('complete-orders', '/api/tables/complete-orders');
-        fetchTableData('orders', '/api/tables/orders');
-        fetchTableData('users', '/api/tables/users');
+        fetchCompleteOrders();
     });
 
-    function fetchTableData(tableId, url) {
-        fetch(url)
+    function fetchCompleteOrders() {
+        fetch('/api/complete-orders')
             .then(response => response.json())
             .then(data => {
-                const tbody = document.getElementById(`${tableId}-body`);
-                tbody.innerHTML = ''; // 기존 행들을 지웁니다.
+                const tableBody = document.querySelector('#complete-orders-table tbody');
+                tableBody.innerHTML = '';
 
-                data.forEach(item => {
+                data.forEach(order => {
                     const row = document.createElement('tr');
-
-                    for (const key in item) {
-                        if (item.hasOwnProperty(key)) {
-                            const cell = document.createElement('td');
-                            cell.textContent = item[key];
-                            row.appendChild(cell);
-                        }
-                    }
-
-                    tbody.appendChild(row);
+                    row.innerHTML = `
+                            <td>${order.complete_id}</td>
+                            <td>${order.created_at}</td>
+                            <td>${order.coffee_name}</td>
+                            <td>${order.price}</td>
+                            <td>${order.user_id}</td>
+                            <td>${order.strength}</td>
+                        `;
+                    tableBody.appendChild(row);
                 });
+
+                document.querySelector('.loading').style.display = 'none';
             })
-            .catch(error => console.error('Error fetching data:', error));
+            .catch(err => {
+                console.error('Failed to fetch complete orders:', err);
+                document.querySelector('.loading').textContent = '데이터를 가져오는 데 실패했습니다.';
+            });
     }
 </script>
 </body>
