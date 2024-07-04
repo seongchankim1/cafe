@@ -12,7 +12,9 @@
     <div class="tab" data-tab="users">사용자</div>
 </div>
 <div id="complete-orders" class="tab-content active">
-    <h2>완료된 주문</h2>
+    <div class="header">
+        <h2>완료된 주문</h2>
+    </div>
     <div class="loading">로딩 중...</div>
     <table id="complete-orders-table">
         <thead>
@@ -30,7 +32,13 @@
     </table>
 </div>
 <div id="users" class="tab-content">
-    <h2>사용자</h2>
+    <div class="header">
+        <h2>사용자</h2>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="사용자 이름을 입력하세요">
+            <button onclick="searchUser()">검색</button>
+        </div>
+    </div>
     <div class="loading">로딩 중...</div>
     <table id="users-table">
         <thead>
@@ -54,13 +62,14 @@
     <div class="modal-content">
         <h2>돈 추가</h2>
         <label for="amount">충전할 금액:</label>
-        <input type="number" id="amount" placeholder="금액을 입력하세요">
+        <input type="text" id="amount" placeholder="금액을 입력하세요">
         <button onclick="addMoney()">추가</button>
         <button onclick="closeModal()">취소</button>
     </div>
 </div>
 
 <button class="add-money-btn" onclick="openModal()">돈 추가</button>
+<button class="staff-page-btn" onclick="location.href='/delete'">직원 페이지로</button>
 
 <script src="/js/database.js"></script>
 </body>

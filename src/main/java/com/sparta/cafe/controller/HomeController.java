@@ -59,7 +59,7 @@ public class HomeController {
 
 	@GetMapping("/order")
 	public String getOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			return "order";
+		return "order";
 	}
 
 	@GetMapping("/user/login-page")
@@ -81,7 +81,14 @@ public class HomeController {
 	}
 
 	@GetMapping("/database")
-	public String databasePage() {
-		return "database";
+	public String databasePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String token = jwtUtil.resolveTokenFromCookies(request);
+		User user = userRepository.findByUsername(jwtUtil.getUserInfoFromToken(token).getSubject());
+		if (user.getRole() == UserRoleEnum.ADMIN) {
+			return "database";
+		} else {
+			response.sendRedirect("/delete");
+			return "order";
+		}
 	}
 }

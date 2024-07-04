@@ -1,11 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
+    const searchContainer = document.querySelector('.search-container');
+    const addMoneyBtn = document.querySelector('.add-money-btn');
+    const staffPageBtn = document.querySelector('.staff-page-btn');
+    let activeTab = 'complete-orders';
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
+            activeTab = tab.dataset.tab;
 
             tabContents.forEach(tc => tc.classList.remove('active'));
             document.getElementById(tab.dataset.tab).classList.add('active');
@@ -13,8 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // 각 탭에 맞는 데이터를 로드
             if (tab.dataset.tab === 'complete-orders') {
                 fetchCompleteOrders();
+                searchContainer.classList.remove('active');
+                addMoneyBtn.classList.remove('active');
             } else if (tab.dataset.tab === 'users') {
                 fetchUsers();
+                searchContainer.classList.add('active');
+                addMoneyBtn.classList.add('active');
             }
         });
     });
@@ -98,7 +107,7 @@ function addMoney() {
     const amount = document.getElementById('amount').value;
 
     if (!selectedUser || !amount) {
-        alert('정확한 금액을 입력하세요.');
+        alert('사용자와 금액을 입력하세요.');
         return;
     }
 
@@ -118,7 +127,7 @@ function addMoney() {
             if (response.ok) {
                 alert('충전 완료!');
                 closeModal();
-                location.reload();
+                fetchUsers(); // 돈 추가 이후에도 사용자 탭이 유지되도록 함
             } else {
                 alert('충전 실패. 다시 시도하세요.');
             }
@@ -126,5 +135,41 @@ function addMoney() {
         .catch(err => {
             console.error('Failed to add money:', err);
             alert('충전 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+        });
+}
+
+function searchUser() {
+    const username = document.getElementById('searchInput').value;
+
+    if (!username) {
+        alert('사용자 이름을 입력하세요.');
+        return;
+    }
+
+    fetch(`/api/database/search?username=${encodeURIComponent(username)}`)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#users-table tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                        <td><input type="radio" name="userSelect" value="${user.id}"></td>
+                        <td>${user.id}</td>
+                        <td>${new Date(user.createdAt).toLocaleString()}</td>
+                        <td>${user.username}</td>
+                        <td>${user.money.toLocaleString()}원</td>
+                        <td>${user.phoneNumber}</td>
+                        <td>${user.role}</td>
+                    `;
+                tableBody.appendChild(row);
+            });
+
+            document.querySelector('#users .loading').style.display = 'none';
+        })
+        .catch(err => {
+            console.error('Failed to search user:', err);
+            alert('사용자 검색 중 오류가 발생했습니다.');
         });
 }

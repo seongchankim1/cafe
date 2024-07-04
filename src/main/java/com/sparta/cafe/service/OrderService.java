@@ -62,7 +62,7 @@ public class OrderService {
 		// 키오스크는 돈이 차감되지 않음
 		if ((user.getMoney() - order.getPrice()) < 0 && !user.getUsername().equals("kiosk")) {
 			throw new IllegalArgumentException("잔액이 부족합니다.");
-		} else {
+		} else if (!user.getUsername().equals("kiosk")) {
 			user.updateMoney(user.getMoney() - order.getPrice());
 		}
 

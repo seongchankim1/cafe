@@ -6,6 +6,7 @@ body {
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
 }
 .tabs {
     display: flex;
@@ -27,6 +28,15 @@ body {
 }
 .tab-content.active {
     display: block;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.header h2 {
+    margin: 0;
 }
 table {
     width: 100%;
@@ -98,10 +108,10 @@ th {
 .modal-content button:hover {
     background-color: #5a3e2b;
 }
-.add-money-btn {
+.add-money-btn,
+.staff-page-btn {
     position: absolute;
     top: 20px;
-    right: 20px;
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
@@ -110,6 +120,48 @@ th {
     border-radius: 4px;
     cursor: pointer;
 }
-.add-money-btn:hover {
+.add-money-btn {
+    display: none;
+}
+.add-money-btn.active {
+    display: inline-block;
+}
+.add-money-btn {
+    right: 220px;
+}
+.staff-page-btn {
+    right: 20px;
+    background-color: #007bff;
+}
+.add-money-btn:hover,
+.staff-page-btn:hover {
+    background-color: #5a3e2b;
+}
+.search-container {
+    display: none;
+    margin-bottom: 0;
+}
+.search-container.active {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.search-container input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+.search-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #8b4513;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.search-container button:hover {
     background-color: #5a3e2b;
 }
