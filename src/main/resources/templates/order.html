@@ -84,6 +84,24 @@
         .delete-btn:hover {
             background-color: #c9302c;
         }
+        .order-history-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff; /* 파란 색상 */
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .order-history-btn:hover {
+            background-color: #0056b3;
+        }
         @media (max-width: 768px) {
             .card {
                 flex: 1 1 calc(50% - 40px);
@@ -158,12 +176,20 @@
         .modal-content button:hover {
             background-color: #5a3e2b;
         }
+        .modal-content .cancel-btn {
+            margin-top: 10px;
+            background-color: #d9534f; /* 붉은 색상 */
+        }
+        .modal-content .cancel-btn:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 <body>
 <div id="money-info">
     <h2>잔액: <span id="money">로딩 중...</span>원</h2>
     <button class="delete-btn" onclick="location.href='/delete'">직원전용</button>
+    <button class="order-history-btn" onclick="location.href='/myorder'">주문 내역</button>
 </div>
 <div id="coffee-container"></div>
 
@@ -178,6 +204,7 @@
             <option value="샷추가">샷추가 (+1000원)</option>
         </select>
         <button id="confirmOrderBtn">주문하기</button>
+        <button id="cancelOrderBtn" class="cancel-btn">취소</button>
     </div>
 </div>
 
@@ -296,6 +323,8 @@
                 closeOrderModal();
             }
         });
+
+        document.getElementById('cancelOrderBtn').addEventListener('click', closeOrderModal);
 
         window.openOrderModal = openOrderModal;
 

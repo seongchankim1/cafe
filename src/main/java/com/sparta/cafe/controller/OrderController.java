@@ -3,6 +3,7 @@ package com.sparta.cafe.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import com.sparta.cafe.dto.CoffeeResponseDto;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
 import com.sparta.cafe.entity.CompleteOrder;
+import com.sparta.cafe.security.UserDetailsImpl;
 import com.sparta.cafe.service.CoffeeService;
 import com.sparta.cafe.service.OrderService;
 
@@ -50,14 +52,14 @@ public class OrderController {
 		return orderService.getCompleteOrders();
 	}
 
-	@GetMapping("/delete")
-	public String getDeletePage() {
-		return "delete";
-	}
-
 	@GetMapping("/coffees")
 	public List<CoffeeResponseDto> getAllCoffees() {
 		return coffeeService.getAllCoffees();
+	}
+
+	@GetMapping("/myorder")
+	public List<OrderResponseDto> myOrder(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return orderService.getMyOrders(userDetails.getUser());
 	}
 
 }

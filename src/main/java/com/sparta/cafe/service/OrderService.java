@@ -124,4 +124,10 @@ public class OrderService {
 			.map(CompleteOrderResponseDto::new)
 			.collect(Collectors.toList());
 	}
+
+	public List<OrderResponseDto> getMyOrders(User user) {
+		return orderRepository.findAllByUserIdOrderByOrderIdDesc(user.getId()).stream()
+			.map(OrderResponseDto::new)
+			.toList();
+	}
 }

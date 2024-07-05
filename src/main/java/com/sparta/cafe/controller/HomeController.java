@@ -58,7 +58,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/order")
-	public String getOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public String getOrderPage() {
 		return "order";
 	}
 
@@ -90,5 +90,10 @@ public class HomeController {
 			response.sendRedirect("/delete");
 			return "order";
 		}
+	}
+
+	@GetMapping("/myorder")
+	public String getMyOrderPage() {
+		return "myorder";
 	}
 }
