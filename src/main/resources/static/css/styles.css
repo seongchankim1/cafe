@@ -178,7 +178,7 @@ body {
     padding: 20px 30px;
     box-sizing: border-box;
     text-align: center;
-    box-shadow: 12px 12px rgba(0, 0, 0, 0.6);
+    box-shadow: 12px 12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     position: relative; /* Ensure positioning context for pseudo-element */
 }
@@ -281,13 +281,13 @@ body {
 .order-box {
     font-size: 2rem;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 3px 0;
     background: #5c4033;
     border-radius: 4px;
     width: 18%; /* 한 줄에 5개가 들어가도록 너비 조정 */
     text-align: center;
-    padding: 10px 0; /* 패딩 조정 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 3px 0; /* 패딩 조정 */
+    box-shadow: 4px 4px rgba(0, 0, 0, 0.4);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -295,7 +295,7 @@ body {
 }
 
 .order-id {
-    font-size: 2rem; /* 글꼴 크기 조정 */
+    font-size: 5rem; /* 글꼴 크기 조정 */
 }
 
 .order-name {
