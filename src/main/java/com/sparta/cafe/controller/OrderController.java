@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.cafe.dto.CoffeeResponseDto;
+import com.sparta.cafe.dto.CompleteOrderResponseDto;
 import com.sparta.cafe.dto.OrderRequestDto;
 import com.sparta.cafe.dto.OrderResponseDto;
 import com.sparta.cafe.entity.CompleteOrder;
@@ -60,6 +61,11 @@ public class OrderController {
 	@GetMapping("/myorder")
 	public List<OrderResponseDto> myOrder(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return orderService.getMyOrders(userDetails.getUser());
+	}
+
+	@GetMapping("/mycompleteorder")
+	public List<CompleteOrderResponseDto> myCompleteOrder(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return orderService.getMyCompleteOrders(userDetails.getUser());
 	}
 
 }

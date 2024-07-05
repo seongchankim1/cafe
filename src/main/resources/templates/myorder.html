@@ -33,14 +33,14 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             border: 2px solid #8B4513;
             overflow-x: auto;
         }
 
         h1 {
             margin-bottom: 20px;
-            font-size: 28px;
+            font-size: 2.5vw; /* 뷰포트 너비에 비례하여 폰트 크기 설정 */
             color: #8B4513;
             font-weight: 700;
         }
@@ -49,12 +49,15 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            table-layout: auto;
         }
 
         th, td {
             border: 1px solid #5a2e0e;
-            padding: 8px;
+            padding: 4px;
             text-align: left;
+            white-space: nowrap;
+            font-size: 1vw; /* 뷰포트 너비에 비례하여 폰트 크기 설정 */
         }
 
         th {
@@ -73,7 +76,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1.5vw; /* 뷰포트 너비에 비례하여 폰트 크기 설정 */
             font-weight: 600;
             transition: background 0.3s;
         }
@@ -84,23 +87,22 @@
 
         @media screen and (max-width: 1000px) {
             .container {
-                font-family: 'Nanum Gothic', sans-serif;
                 padding: 20px 10px;
                 max-width: 100%;
             }
 
             h1 {
-                font-size: 50px;
+                font-size: 4vw; /* 작은 화면에서도 유동적으로 조정 */
             }
 
             th, td {
-                padding: 2px;
-                font-size: 40px;
+                padding: 4px;
+                font-size: 2.7vw; /* 작은 화면에서도 유동적으로 조정 */
             }
 
             button {
                 padding: 8px 16px;
-                font-size: 50px;
+                font-size: 4vw; /* 작은 화면에서도 유동적으로 조정 */
             }
         }
     </style>
@@ -116,6 +118,8 @@
             <th>이름</th>
             <th>가격</th>
             <th>샷</th>
+            <th>생성 날짜</th>
+            <th>상태</th>
         </tr>
         </thead>
         <tbody>
@@ -127,23 +131,41 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
-        fetch('/api/cafe/myorder')
-            .then(response => response.json())
-            .then(data => {
+        Promise.all([
+            fetch('/api/cafe/myorder').then(response => response.json()),
+            fetch('/api/cafe/mycompleteorder').then(response => response.json())
+        ])
+            .then(([orders, completeOrders]) => {
                 const tableBody = document.getElementById('orderTable').getElementsByTagName('tbody')[0];
-                data.forEach(order => {
+
+                const allOrders = [...orders, ...completeOrders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                allOrders.forEach(order => {
                     const row = tableBody.insertRow();
-                    row.insertCell(0).textContent = order.orderId;
+                    row.insertCell(0).textContent = order.orderId || order.completeOrderId;
                     row.insertCell(1).textContent = order.coffeeName;
                     row.insertCell(2).textContent = order.username;
                     row.insertCell(3).textContent = order.price;
                     row.insertCell(4).textContent = order.strength;
+                    row.insertCell(5).textContent = formatTime(order.createdAt);
+                    row.insertCell(6).textContent = order.completeOrderId ? '완성' : '미완성';
                 });
             })
             .catch(error => {
                 console.error('Error fetching order data:', error);
             });
     });
+
+    function formatTime(dateTime) {
+        const date = new Date(dateTime);
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? '오후' : '오전';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // 0을 12로 변경
+        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+        return ampm + ' ' + hours + ':' + minutesStr;
+    }
 
     function goBack() {
         window.location.href = '/order';

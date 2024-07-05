@@ -1,5 +1,7 @@
 package com.sparta.cafe.dto;
 
+import java.time.LocalDateTime;
+
 import com.sparta.cafe.entity.Order;
 import lombok.Getter;
 
@@ -14,6 +16,7 @@ public class OrderResponseDto {
 	private String username;
 	private String coffeeName;
 	private String strength;
+	private LocalDateTime createdAt;
 
 	public OrderResponseDto(Order order) {
 		this.orderId = order.getOrderId();
@@ -23,6 +26,7 @@ public class OrderResponseDto {
 		this.username = order.getUser().getUsername(); // 사용자 이름 추가
 		this.coffeeName = order.getCoffee().getCoffeeName(); // 음료 이름 추가
 		this.strength = order.getStrength();
+		this.createdAt = order.getCreatedAt();
 	}
 
 }
