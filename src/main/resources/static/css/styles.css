@@ -208,7 +208,6 @@ body {
     color: #fff;
 }
 
-
 .menu {
     flex-grow: 1;
     display: flex;
@@ -269,24 +268,25 @@ body {
 
 .orders h2 {
     font-size: 3rem;
+    margin: 0; /* 상하 간격 조정 */
 }
 
 .orders .order-boxes {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 5px; /* 상하 간격 줄이기 */
 }
 
 .order-box {
-    font-size: 2rem;
+    font-size: 1.5rem; /* 글꼴 크기 조정 */
     font-weight: bold;
-    margin: 3px 0;
+    margin: 15px 0; /* 상하 간격 줄이기 */
     background: #5c4033;
     border-radius: 4px;
     width: 18%; /* 한 줄에 5개가 들어가도록 너비 조정 */
     text-align: center;
-    padding: 3px 0; /* 패딩 조정 */
+    padding: 1px 0; /* 패딩 조정 */
     box-shadow: 4px 4px rgba(0, 0, 0, 0.4);
     color: #fff;
     display: flex;
@@ -295,17 +295,18 @@ body {
 }
 
 .order-id {
-    font-size: 5rem; /* 글꼴 크기 조정 */
+    font-size: 3.5rem; /* 글꼴 크기 조정 */
+    margin: 3px; /* 상하 간격 조정 */
 }
 
 .order-name {
     font-size: 1rem; /* 글꼴 크기 조정 */
-    margin-top: 5px;
+    margin-top: 3px; /* 상하 간격 줄이기 */
     color: #ffd700;
 }
 
 .info {
-    margin-top: 20px;
+    margin-top: 10px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -342,4 +343,14 @@ body {
     justify-content: space-between;
     height: 100%;
     width: 45%;
+}
+
+#qr-code {
+    text-align: center;
+    margin-top: 5px;
+}
+
+#qr-code img {
+    width: 120px;
+    height: 120px;
 }

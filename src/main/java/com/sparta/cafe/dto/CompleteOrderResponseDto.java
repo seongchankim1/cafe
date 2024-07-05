@@ -18,7 +18,7 @@ public class CompleteOrderResponseDto {
 	private LocalDateTime createdAt;
 
 	public CompleteOrderResponseDto(CompleteOrder order) {
-		this.completeOrderId = order.getCompleteId();
+		this.completeOrderId = order.getOrderId();
 		this.price = order.getPrice();
 		this.username = order.getUser().getUsername(); // 사용자 이름 추가
 		this.coffeeName = order.getCoffee().getCoffeeName(); // 음료 이름 추가
