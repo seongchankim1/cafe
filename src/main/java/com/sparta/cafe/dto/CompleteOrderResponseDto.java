@@ -11,6 +11,7 @@ import lombok.Getter;
 public class CompleteOrderResponseDto {
 
 	private Long completeOrderId;
+	private Long orderId;
 	private int price;
 	private String username;
 	private String coffeeName;
@@ -18,7 +19,8 @@ public class CompleteOrderResponseDto {
 	private LocalDateTime createdAt;
 
 	public CompleteOrderResponseDto(CompleteOrder order) {
-		this.completeOrderId = order.getOrderId();
+		this.completeOrderId = order.getCompleteId();
+		this.orderId = order.getOrderId();
 		this.price = order.getPrice();
 		this.username = order.getUser().getUsername(); // 사용자 이름 추가
 		this.coffeeName = order.getCoffee().getCoffeeName(); // 음료 이름 추가
