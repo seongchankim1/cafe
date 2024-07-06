@@ -33,7 +33,6 @@ public class OrderService {
 	private final CompleteOrderRepository completeOrderRepository;
 	private List<CompleteOrder> completeList = new ArrayList<>();
 	Long orderId = 1L;
-	LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
 	public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, UserRepository userRepository, CompleteOrderRepository completeOrderRepository) {
 		this.orderRepository = orderRepository;
@@ -130,6 +129,7 @@ public class OrderService {
 	}
 
 	public List<OrderResponseDto> getMyOrders(User user) {
+		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 		return orderRepository.findAllByUserIdOrderByOrderIdDesc(user.getId()).stream()
 			.filter(order -> order.getCreatedAt().toLocalDate().isEqual(today))
 			.map(OrderResponseDto::new)
@@ -137,6 +137,7 @@ public class OrderService {
 	}
 
 	public List<CompleteOrderResponseDto> getMyCompleteOrders(User user) {
+		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 		return completeOrderRepository.findAllByUserIdOrderByOrderIdDesc(user.getId()).stream()
 			.filter(order -> order.getCreatedAt().toLocalDate().isEqual(today))
 			.map(CompleteOrderResponseDto::new)
