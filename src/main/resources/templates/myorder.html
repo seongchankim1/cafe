@@ -147,7 +147,7 @@
                     row.insertCell(2).textContent = order.username;
                     row.insertCell(3).textContent = order.price;
                     row.insertCell(4).textContent = order.strength;
-                    row.insertCell(5).textContent = formatTime(order.createdAt);
+                    row.insertCell(5).textContent = new Date(order.createdAt).toLocaleString();
                     row.insertCell(6).textContent = order.completeOrderId ? '완성' : '미완성';
                 });
             })
@@ -157,15 +157,20 @@
     });
 
     function formatTime(dateTime) {
-        const date = new Date(dateTime);
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? '오후' : '오전';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // 0을 12로 변경
-        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-        return ampm + ' ' + hours + ':' + minutesStr;
+        const date = new Date(dateTime); // 로컬 시간대로 해석
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            timeZone: 'Asia/Seoul'
+        };
+        return new Intl.DateTimeFormat('ko-KR', options).format(date);
     }
+
+
 
     function goBack() {
         window.location.href = '/order';

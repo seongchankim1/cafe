@@ -129,18 +129,18 @@ public class OrderService {
 	}
 
 	public List<OrderResponseDto> getMyOrders(User user) {
-		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+		LocalDate today = LocalDate.now();
 		return orderRepository.findAllByUserIdOrderByOrderIdDesc(user.getId()).stream()
 			.filter(order -> order.getCreatedAt().toLocalDate().isEqual(today))
 			.map(OrderResponseDto::new)
-			.toList();
+			.collect(Collectors.toList());
 	}
 
 	public List<CompleteOrderResponseDto> getMyCompleteOrders(User user) {
-		LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+		LocalDate today = LocalDate.now();
 		return completeOrderRepository.findAllByUserIdOrderByOrderIdDesc(user.getId()).stream()
 			.filter(order -> order.getCreatedAt().toLocalDate().isEqual(today))
 			.map(CompleteOrderResponseDto::new)
-			.toList();
+			.collect(Collectors.toList());
 	}
 }
