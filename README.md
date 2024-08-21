@@ -9,6 +9,7 @@
 ### 주문 페이지
   ![image](https://github.com/user-attachments/assets/8de685a0-2d3b-456a-a397-9ddae6f2b65e)
 - 주문이 가능하며, Hot Ice등도 선택이 가능하다.
+- 여기서 주문 시 직원의 주문 확인 페이지에 자동으로 생성이 된다.
 
 ### 주문 확인 페이지
 ![image](https://github.com/user-attachments/assets/1737d123-d6ff-4b3b-8b6f-d8e372fe2f02)
